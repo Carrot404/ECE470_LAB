@@ -22,7 +22,7 @@
 ## How to make your script executable
 
 1. cd catkin_(yourID)
-2. cd catkin_(yourID)/src/lab2pkg_py/scripts 
+2. cd catkin_(yourID)/src/lab3pkg_hanoi/scripts 
 3. chmod +x lab3_exec.py
 
 ## Steps of testing your code with robot.

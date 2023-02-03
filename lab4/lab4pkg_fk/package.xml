@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lab4pkg_fk</name>
+  <version>0.0.0</version>
+  <description>The lab4pkg_fk package</description>
+  <license>MIT</license>
+  <url type="website">https://github.com/hangcui1201/UIUC_ECE470_INTRODUCTION_TO_ROBOTICS</url>
+  <author email="songjiexiao@zju.edu.cn">Songjie Xiao</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <exec_depend>rospy</exec_depend>
+  <build_depend>ur_msgs</build_depend>
+  <exec_depend>ur_msgs</exec_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+
+  <export>
+  </export>
+  
+</package>
