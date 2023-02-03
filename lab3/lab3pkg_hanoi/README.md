@@ -31,9 +31,3 @@
 2. rosrun ur3e_driver_ece470 ur3e_driver_ece470 (another terminal)
 3. rosrun lab3pkg_hanoi lab3_exec.py (another terminal)
 4. do not forget to press `start` button in Teach Pendant
-
-## Important
-**Joint Position** you get from topic or you send to another topic is in an order like that：
-[**elbow_joint**, shoulder_lift_joint, **shoulder_pan_joint**, wrist_1_joint, wrist_2_joint, wrist_3_joint]
-And Joint Name in your Teach Pedant according to above order **should** be assigned like that:
-[**Elbow** Shoulder **Base** Wrist1 Wrist2 Wrist3]

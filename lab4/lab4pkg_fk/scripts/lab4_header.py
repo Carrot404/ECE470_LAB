@@ -1,10 +1,7 @@
-import rospkg
-
-PI = 3.1415926535
-
-from ur_msgs.msg import IOStates, Digital
-from sensor_msgs.msg import JointState
-from trajectory_msgs.msg import JointTrajectory,JointTrajectoryPoint
+#!/usr/bin/env python
+# from ur_msgs.msg import IOStates, Digital
+# from sensor_msgs.msg import JointState
+# from trajectory_msgs.msg import JointTrajectory,JointTrajectoryPoint
 
 # messages for student to use
 """
@@ -47,9 +44,6 @@ string[] name
 float64[] position
 float64[] velocity
 float64[] effort
-
-**[elbow_joint, shoulder_lift_joint, shoulder_pan_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]**
-**[Elbow Shoulder Base Wrist1 Wrist2 Wrist3]**
 
 # rosmsg show trajectory_msgs/JointTrajectoryPoint
 ------------------------

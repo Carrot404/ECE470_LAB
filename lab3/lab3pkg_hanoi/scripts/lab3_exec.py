@@ -107,7 +107,7 @@ so that we can control the state of suction cup.
  
 def move_arm(pub_setjoint, dest):
 	msg = JointTrajectory()
-	msg.joint_names = ["elbow_joint", "shoulder_lift_joint", "shoulder_pan_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
+	msg.joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
 	point = JointTrajectoryPoint()
 	point.positions = dest
 	point.time_from_start = rospy.Duration(2)

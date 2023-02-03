@@ -43,9 +43,6 @@ float64[] position
 float64[] velocity
 float64[] effort
 
-**[elbow_joint, shoulder_lift_joint, shoulder_pan_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]**
-**[Elbow Shoulder Base Wrist1 Wrist2 Wrist3]**
-
 # rosmsg show trajectory_msgs/JointTrajectoryPoint
 ------------------------
 float64[] positions

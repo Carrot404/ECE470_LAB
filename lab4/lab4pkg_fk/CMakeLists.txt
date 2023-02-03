@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   ur_msgs
   sensor_msgs
   trajectory_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -135,6 +136,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/lab3pkg_py_node.cpp)
+add_executable(test_fk test/test_fk.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +152,7 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(test_fk ${catkin_LIBRARIES})
 
 #############
 ## Install ##
