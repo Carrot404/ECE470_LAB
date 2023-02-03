@@ -3,7 +3,9 @@
   <name>lab3pkg_hanoi</name>
   <version>0.0.0</version>
   <description>The lab3pkg_hanoi package</description>
+
   <license>MIT</license>
+  <url type="website">https://github.com/Carrot404/ECE470_LAB</url>
   <author email="songjiexiao@zju.edu.cn">Songjie Xiao</author>
 
   <buildtool_depend>catkin</buildtool_depend>

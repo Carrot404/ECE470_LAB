@@ -10,7 +10,6 @@ project(lab3pkg_hanoi)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   ur_msgs
-  actionlib
   sensor_msgs
   trajectory_msgs
 )
