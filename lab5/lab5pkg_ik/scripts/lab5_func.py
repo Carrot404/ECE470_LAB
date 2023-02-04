@@ -27,10 +27,8 @@ Function that calculates encoder numbers for each motor
 """
 def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 
-	# Initialize the return_value 
-	return_value = [None, None, None, None, None, None]
-
-	print("Foward kinematics calculated:\n")
+	# =========== Implement joint angle to encoder expressions here ===========
+	print("Forward kinematics calculated:\n")
 
 	# =================== Your code starts here ====================#
 	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6])
@@ -49,14 +47,7 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	
 	print(str(T) + "\n")
 
-	return_value[0] = theta3
-	return_value[1] = theta2
-	return_value[2] = theta1 + (0.5*PI)
-	return_value[3] = theta4 - (0.5*PI)
-	return_value[4] = theta5
-	return_value[5] = theta6
-
-	return return_value
+	return T
 
 
 """
@@ -104,5 +95,4 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	print("theta1 to theta6: " + str(thetas) + "\n")
 
 	thetas = np.radians(thetas)
-	return lab_fk(float(thetas[0]), float(thetas[1]), float(thetas[2]), \
-		          float(thetas[3]), float(thetas[4]), float(thetas[5]) )
+	return thetas

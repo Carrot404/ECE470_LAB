@@ -30,7 +30,7 @@ current_position_set = False
 """
 Whenever /ur_hardware_interface/io_states publishes info this callback function is called.
 """
-def input_callback(msg):
+def gripper_input_callback(msg):
 
 	global digital_in_0
 	pin = 0
@@ -106,13 +106,13 @@ Program run from here
 """
 def main():
 
-	global home
-
 	# Initialize ROS node
-	rospy.init_node('lab3node')
+	rospy.init_node('lab5_node')
 
 	# Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
 	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint',JointTrajectory,queue_size=10)
+
+	pub_setio = rospy.Publisher('ur3e_driver_ece470/setio',Digital,queue_size=10)
 
 	# Initialize subscriber to /joint_states & /ur_hardware_interface/io_states and callback fuction
 	# each time data is published
@@ -124,7 +124,7 @@ def main():
 	if(len(sys.argv) != 5):
 		print("\n")
 		print("Invalid number of input!\n")
-		print("rosrun lab4pkg_py lab4_exec.py xWgrip yWgrip zWgrip yaw_WgripDegree \n")
+		print("rosrun lab5pkg_ik lab5_exec.py xWgrip yWgrip zWgrip yaw_WgripDegree \n")
 	else:
 		print("\nxWgrip: " + sys.argv[1] + ", yWgrip: " + sys.argv[2] + \
 			  ", zWgrip: " + sys.argv[3] + ", yaw_WgripDegree: " + sys.argv[4] + "\n")
