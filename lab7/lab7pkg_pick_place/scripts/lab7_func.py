@@ -17,10 +17,16 @@ def Get_MS():
 	M = np.eye(4)
 	S = np.zeros((6,6))
 
-
-
-
 	
+
+
+
+
+
+
+
+
+
 	# ==============================================================#
 	return M, S
 
@@ -46,12 +52,12 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 
 
 
+
+
 	# ==============================================================#
 	
 	print(str(T) + "\n")
-
 	return T
-
 
 """
 Function that calculates an elbow up Inverse Kinematic solution for the UR3

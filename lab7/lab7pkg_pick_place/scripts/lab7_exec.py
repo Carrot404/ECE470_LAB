@@ -1,20 +1,12 @@
 #!/usr/bin/env python
+
 import copy
 import time
 import rospy
-import rospkg
-import os
-import actionlib
-import sys
-import numpy as np
-import math
-import cv2
-from lab5_header import *
-from lab5_func import *
-from lab5_img import *
 
-
-PI = np.pi
+from lab7_header import *
+from lab7_func import *
+from lab7_img import *
 
 
 # UR3 home location
@@ -25,7 +17,7 @@ current_position = copy.deepcopy(home)
 
 thetas = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-digital_in_0 = 0
+digital_in_0 = 0.0
 analog_in_0 = 0.0
 
 suction_on = True
@@ -41,10 +33,9 @@ def input_callback(msg):
 
 	global digital_in_0
 	pin = 0
-	pinstate = True
-	pinstate = msg.digital_in_states[pin].state
+	pin_state = msg.digital_in_states[pin].state
 	
-	if(pinstate):
+	if(pin_state):
 		digital_in_0 = 1
 	else:
 		digital_in_0 = 0
@@ -97,16 +88,15 @@ def gripper(pub_setio, io_0):
 Move robot arm from one position to another
 """
 def move_arm(pub_setjoint, dest):
+
 	msg = JointTrajectory()
-	msg.joint_names = ["elbow_joint", "shoulder_lift_joint", "shoulder_pan_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
+	msg.joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
 	point = JointTrajectoryPoint()
 	point.positions = dest
 	point.time_from_start = rospy.Duration(2)
 	msg.points.append(point)
 	pub_setjoint.publish(msg)
-
 	time.sleep(2.5)
-
 
 """
 Program run from here
@@ -114,26 +104,24 @@ Program run from here
 def main():
 
 	# Initialize ROS node
-	rospy.init_node('lab5node')
+	rospy.init_node('lab7_node')
 
 	# Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
 	pub_setio = rospy.Publisher('ur3e_driver_ece470/setio',Digital,queue_size=10)
 	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint',JointTrajectory,queue_size=10)
 
-	# Initialize subscriber to /joint_states & /ur_hardware_interface/io_states and callback fuction
+	# Initialize subscriber to /joint_states & /ur_hardware_interface/io_states and callback function
 	# each time data is published
 	sub_position = rospy.Subscriber('/joint_states', JointState, position_callback)
 	sub_gripper_input = rospy.Subscriber('/ur_hardware_interface/io_states', IOStates, input_callback)
 
-	rospack = rospkg.RosPack()
-	lab5_path = rospack.get_path('lab5pkg_py')
-	_test1 = os.path.join(lab5_path, 'scripts', '_test1.bmp')
-	_test2 = os.path.join(lab5_path, 'scripts', '_test2.bmp')
-	_img = os.path.join(lab5_path, 'scripts', '_lab5.bmp')	
-
 	############## Your Code Start Here ############## 	
 	# TODO: modify by yourself
-	center_values, shape, theta = ImgProcess(_test1, _test2, [[-361.8, -187.6], [-436.45, -107]], _img) # mo
+
+	img_cali1 = 'img_cali_1.bmp'
+	img_cali2 = 'img_cali_2.bmp'
+	img_snap = 'img_snap.bmp'
+	center_values, shape, theta = ImgProcess(img_cali1, img_cali2, [[-361.8, -187.6], [-436.45, -107]], img_snap)
 
 	############### Your Code End Here ###############
 
@@ -146,46 +134,42 @@ def main():
 
 	############## Your Code Start Here ############## 
 	# TODO: finish the task
-		
-	init_dest = lab_invk(-0.364,-0.1056,0.2,-PI*3)
-	end_dest = []
-	end_dest.append(lab_invk(0.2966,-0.1495,0.09,-PI*3))
-	end_dest.append(lab_invk(0.2966,-0.2373,0.09,-PI*3))
 
-	move_arm(pub_setjoint, init_dest)
+	
 
-	for i in range(len(theta)):
-		the = -(theta[i] + PI/2)
-		if the < -PI:
-			the = the + 2*PI
-		if the > PI:
-			the = the - 2*PI
-		the = the -3*PI
-		
-		new_dest = lab_invk(center_values[i][0]/1000,center_values[i][1]/1000,0.1,-PI*3)
-		move_arm(pub_setjoint, new_dest)
-		new_dest_ = lab_invk(center_values[i][0]/1000,center_values[i][1]/1000,0.077,-PI*3)
-		move_arm(pub_setjoint, new_dest_)
-		gripper(pub_setio,suction_on)
-		move_arm(pub_setjoint, new_dest)
-		if shape[i] == 0:  
-			delta = end_dest[0][0] - new_dest[0]
-			end_dest_ = end_dest[0]
-			end_dest_[5] = the - delta
-			move_arm(pub_setjoint,end_dest_)
-			
-		else:
-			delta = end_dest[1][0] - new_dest[0]
-			end_dest_ = end_dest[1]
-			end_dest_[5] = the - delta
-			move_arm(pub_setjoint,end_dest_)
-		gripper(pub_setio,suction_off)
-		move_arm(pub_setjoint, init_dest)
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	############### Your Code End Here ###############
 
 	rospy.loginfo("Destination is reached!")
-
 
 
 if __name__ == '__main__':

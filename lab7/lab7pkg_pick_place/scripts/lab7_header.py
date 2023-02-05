@@ -3,12 +3,12 @@ from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory,JointTrajectoryPoint
 
 """
-Digital msg
+# rosmsg show ur_msgs/Digital
 ------------------------
 uint8 pin
 bool state
 
-IOStates msg
+# rosmsg show ur_msgs/IOStates
 ------------------------
 ur_msgs/Digital[] digital_in_states
     uint8 pin
@@ -32,7 +32,7 @@ ur_msgs/Analog[] analog_out_states
     uint8 domain
     float32 state
 
-JointState msg
+# rosmsg show sensor_msgs/JointState
 ------------------------
 std_msgs/Header header
     uint32 seq
@@ -43,18 +43,15 @@ float64[] position
 float64[] velocity
 float64[] effort
 
-**[elbow_joint, shoulder_lift_joint, shoulder_pan_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]**
-**[Elbow Shoulder Base Wrist1 Wrist2 Wrist3]**
-
-JointTrajectoryPoint msg
+# rosmsg show trajectory_msgs/JointTrajectoryPoint
 ------------------------
 float64[] positions
 float64[] velocities
 float64[] accelerations
 float64[] effort
-duration time_from_start      **rospy.Duration()**
+duration time_from_start
 
-JointTrajectory msg
+# rosmsg show trajectory_msgs/JointTrajectory
 ------------------------
 std_msgs/Header header
     uint32 seq
