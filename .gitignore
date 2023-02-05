@@ -1,4 +1,10 @@
 # this is .gitignore file.
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+old_files
+
 tex
 doc
-code
