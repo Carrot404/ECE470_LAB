@@ -1,0 +1,469 @@
+\chapter{The Tower of Hanoi with ROS}
+\section{Important}
+Read the entire lab before starting and especially the ``Grading" section as there are points you will receive by completing certain sections or checkpoints
+by the end of the lab session(s). 
+\section{Objectives}
+This lab is an introduction to controlling the UR3 robot using the Robot Operating System (ROS) and the Python programming language.  In this lab, you will:
+\begin{itemize}
+\item Record joint angles that position the robot arm at waypoints in the Tower of Hanoi solution
+\item Modify the given starter python file to move the robot to waypoints and enable and disable the suction cup gripper such that the blocks are moved in the\
+correct pattern.
+\item If the robot suction senses that a block is not in the gripper when it should be, the program should halt with an error.
+\item Program the robot to solve the Tower of Hanoi problem allowing the user to select any of three starting positions and ending positions.
+\end{itemize}
+
+\newpage
+\section{Pre-Lab}
+Read ``\textit{A Gentle Introduction to ROS}", available online, Specifically:
+\begin{itemize}
+\item Chapter 2: 2.4 Packages, 2.5 The Master, 2.6 Nodes, 2.7.2 Messages and message types.
+\item Chapter 3 Writing ROS programs.
+\end{itemize}
+\section{References}
+\begin{itemize}
+\item Consult Appendix \ref{cprog} of this lab manual for details of ROS and Python functions used to control the UR3.
+\item ``\textit{A Gentle Introduction to ROS}", Chapter 2 and 3. \url{http://coecsl.ece.illinois.edu/ece470/agitr-letter.pdf}
+\item A short tutorial for ROS by Hyongju Park. \url{https://sites.google.com/site/ashortrostutorial/}
+\item \url{http://wiki.ros.org/}
+\item Since this is a robotics lab and not a course in computer science or discrete math, feel free to Google for solutions to\
+the Tower of Hanoi problem.\footnote{\url{http://www.cut-the-knot.org/recurrence/hanoi.shtml} (an active site, as of this writing.)} You\
+are not required to implement a recursive solution.
+
+\end{itemize}
+
+\newpage
+\section{Task}
+The original goal of Tower of Hanoi is to move a ``tower'' of three blocks from one of three locations on the table to another. Due to the limitations of simulator, the tower is "2D" (lying on the table) instead of 3D one which you stack vertically. So instead of stacking the blocks upwards, you are "stacking" the blocks towards the robot base horizontally. 
+
+An example is shown in \figref{towers}.  The blocks are numbered with block 1 on the top and block 3 on the bottom. The blocks are color-coded in the simulator, and it corresponds to the numbers in the following order:
+
+\begin{enumerate}
+    \item Red
+    \item Yellow
+    \item Green
+\end{enumerate}
+
+Obviously, the "2D" version doesn't have gravity to enforce building from "bottom" to "top", but you should still code it as if it has gravity (no floating blocks). You may not place a block on top of a lower-numbered block, as illustrated in \figref{legal}. (For example, no green block on top of red or yellow blocks.)
+
+In addition, unlike an actual vacuum gripper, the vacuum gripper in the simulator has to go to the center of an object in order to actually grip it. Due to this difference, you will be given two files that record the locations of towers corresponding to the actual lab environment and the simulator environment.
+
+For this lab, we will complicate the task slightly.  Your python program should use the robot to move a tower from {\it any} of the three\
+locations to {\it any} of the other two locations.  Therefore, you should prompt the user to specify the start and destination locations for the tower.
+
+\begin{figure}
+	\centering
+		\includegraphics[scale=0.75]{lab2_towers.jpg}
+	\caption{\figlbl{towers} Example start and finish tower locations.}
+\end{figure}
+
+\begin{figure}
+	\centering
+		\includegraphics[scale=0.75]{lab2_legal.jpg}
+	\caption{\figlbl{legal} Examples of a legal and an illegal move.}
+\end{figure}
+
+\newpage
+\section{Procedure}
+\begin{enumerate}
+\item Creat your own workspace as shown in Appendix \ref{cprog}.
+\item If you haven't already, download \textbf{lab2andDriverPy.tar.gz} from the course website and extract into your catkin workspace \textbf{/src} folder.  Do this at
+a command prompt with the tar command, \textbf{tar -zxvf lab2andDriverPy.tar.gz}.  You should see two folders \textbf{lab2pkg\_py} and \textbf{drivers}.  Compile your workspace with
+\textbf{catkin\_make}. Inside this package you can find \textbf{lab2\_exec.py} with comments to help you complete the lab. 
+
+\begin{itemize}
+\item \textbf{lab2\_exec.py} a file in scripts folder with skeleton code to get you started on this lab. See Appendix \ref{cprog} for how to use basic ROS. Students are encouraged to make their own "cheat sheet" for some commonly used ROS and Linux commands. Also\
+read carefully through the below section that takes you line by line through the starter code.  
+\item \textbf{lab2\_spawn.py} a file in scripts folder that allows you to spawn and respawn blocks in the desired starting location (A, B, or C).
+\item \textbf{CMakeLists.txt} a file that sets up the necessary libraries and environment for compiling lab2\_exec.py.
+\item \textbf{package.xml} This file defines properties about the package including package dependencies.
+\item To run lab2 code: In one terminal source it and run \textbf{roslaunch ur3\_driver ur3\_gazebo.launch}. 
+\item Then run the lab2 spawn code to spawn blocks \textbf{rosrun lab2pkg\_py lab2\_spawn.py [A/B/C]}
+\item Finally, run the lab2 ros node \textbf{rosrun lab2pkg\_py lab2\_exec.py}
+\end{itemize}
+
+\item 
+
+\item Use the provided tape to mark the three possible tower bases.  You should initial your markers so you can distinguish your\
+tower bases from the ones used by teams in other lab sections.
+\item For each base, place the tower of blocks and use the teach pendant to find joint angles corresponding to the top, middle, and bottom\
+block positions and orientation angles.  Record these joint angles for use in your program.
+\item Modify \textbf{lab2\_exec.py} to prompt the user for the start and destination tower locations (you may assume that the user will not\
+choose the same location twice) and move the blocks accordingly using the suction cup to grip the blocks.  The starter file performs basic motions 
+but provides a function definition for moving blocks (\textbf{move\_block}). Once you understand
+the starter code moving from one position to the next, clean up the code by completing the shell function \textbf{move\_block}.  
+\textbf{move\_block} picks up a block from a tower and places it on another tower. You may also create other functions for prompting
+user input and solving the tower of Hanoi problem given starting and ending locations but these are not required.  
+\item Add one more feature to your program.  As you saw in Lab 1.5, the Coval device that is creating the vacuum for the gripper also senses
+the level of suction being produced indicating if an item is in the gripper.  Recall that \textbf{Digital Input 0} and \textbf{Analog Input 0} are connected to
+this feedback.  Use \textbf{Digital Input 0} or \textbf{Analog Input 0} to determine if a block is held by the gripper.  If no block is found where a block should be,
+have your program exit and print an error to the console.\\
+To figure out how to do this with ROS you are going to have to do a bit of ``ROS" investigation.  Use ``\textbf{rostopic list}", ``\textbf{rostopic info}" and ``\textbf{rosmsg list}" to discover
+what topic to subscribe and what message will be recieved in your subscribe callback function.  Once you find the topic and message run ``\textbf{rosmsg info}"
+to figure out what variable you will need to read from the message sent to your callback function.  Just like the global variables thetas that
+save the positions of the robot joints inside the call back \textbf{position\_callback()}, create global variables
+to communicate to your code the state of \textbf{Digital Input 0} or \textbf{Analog Input 0}.  Normally once you figure out which message you will be using 
+you need to import it in the \textbf{lab2\_header} file that defines this message.  The \textbf{lab2\_header} file has already imported it in \textbf{lab2\_header.py} for you.  Use the explanation below
+and the given code in \textbf{lab2\_exec.py} that creates the subscription to \textbf{ur3/position} and its callback function as a guide to subscribe to the rostopic
+that publishes the IO status.     
+
+\end{enumerate}
+
+\section{Lab2\_exec.py Explained}
+First open up \textbf{lab2\_exec.py} and read through the code and its comments as this is the latest version of Lab 2's starter code. Below is the same \textbf{lab2\_exec.py}\
+file listing with code comments removed and possible small differences due to changes in the lab.  If you find a difference go with the actual \textbf{lab2\_exec.py}\
+file as the correct version.  \textbf{lab2\_exec.py} is broken down into sections and described in more detail below.  
+
+{\footnotesize
+%\tiny{
+%\begin{verbatim}[obeytabs,tabsize=4]
+%\footnotesize{
+\begin{verbatim}
+import copy
+import time
+import rospy
+from lab2_header import *
+
+SPIN_RATE = 20
+\end{verbatim}}
+
+You can find \textbf{lab2\_header.py} in the \textbf{lab2pkg\_py} /scripts directory.  It includes all needed files to allow \textbf{lab2\_exec.py} to call ROS functionality.
+\textbf{SPIN\_RATE} will be used as the publish rate to send commands to the ROS driver.  
+
+{\footnotesize
+\begin{verbatim}
+
+home = [120*PI/180.0, -90*PI/180.0, 90*PI/180.0, -90*PI/180.0, -90*PI/180.0, 0*PI/180.0]
+
+# Hanoi tower location 1
+Q11 = [120*PI/180.0, -56*PI/180.0, 124*PI/180.0, -158*PI/180.0, -90*PI/180.0, 0*PI/180.0]
+Q12 = [120*PI/180.0, -64*PI/180.0, 123*PI/180.0, -148*PI/180.0, -90*PI/180.0, 0*PI/180.0]
+Q13 = [120*PI/180.0, -72*PI/180.0, 120*PI/180.0, -137*PI/180.0, -90*PI/180.0, 0*PI/180.0]
+
+thetas = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+digital_in_0 = 0;
+analog_in_0 = 0.0;
+
+suction_on = True
+suction_off = False
+current_io_0 = False
+current_position_set = False
+
+# UR3 current position, using home position for initialization
+current_position = copy.deepcopy(home)
+
+\end{verbatim}}
+
+This code is initializing three python ``list" variables to be used as waypoints.  These variables Q11, Q12 and Q13 will be used\
+to command the robot to the six $\theta$'s assigned to the list.  The Q11, Q12 and Q13 list elements are in radians and arranged in the order\
+$\left\{\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6,\right\}$.\
+We also initialize the ``current\_position" using the ``home" list. 
+
+{\footnotesize
+\begin{verbatim}
+Q = [ [Q11, Q12, Q13], \
+      [Q11, Q12, Q13], \
+      [Q11, Q12, Q13] ]
+\end{verbatim}} 
+ 
+The lists, once created, are added to a multi-dimensional list for easy access. This structure will allow us to step through the array in a 
+logical fashion. Currently all the columns are the same but you can change this as you see fit, perhaps letting row indicate the height in the
+stack and column tower location. Feel free to change the size
+and contents as appropriate for your algorithm.
+ 
+{\footnotesize
+\begin{verbatim}
+def position_callback(msg):
+
+    global thetas
+    global current_position
+    global current_position_set
+
+    thetas[0] = msg.position[0]
+    thetas[1] = msg.position[1]
+    thetas[2] = msg.position[2]
+    thetas[3] = msg.position[3]
+    thetas[4] = msg.position[4]
+    thetas[5] = msg.position[5]
+
+    current_position[0] = thetas[0]
+    current_position[1] = thetas[1]
+    current_position[2] = thetas[2]
+    current_position[3] = thetas[3]
+    current_position[4] = thetas[4]
+    current_position[5] = thetas[5]
+
+    current_position_set = True
+\end{verbatim}}
+
+This is \textbf{lab2node}'s callback function that is called when the \textbf{ur3\_driver} publishes new position data.  \textbf{ur3\_driver} publishes new
+angle position data every 8ms, so this function \textbf{position\_callback} is run every 8ms.  
+   
+Next in \textbf{lab2\_exec.py} are the function \textbf{gripper()} and \textbf{move\_arm()}.  These functions are passed variables that are initialized at the beginning of the file. The program runs from the main function, so it will
+be explained first and then we will come back to \textbf{gripper()} and \textbf{move\_arm()}.
+   
+{\footnotesize
+\begin{verbatim}
+def main():
+
+    global home
+    global Q
+
+    # Initialize ROS node
+    rospy.init_node('lab2node')
+
+    # Initialize publisher for ur3/command with buffer size of 10
+    pub_command = rospy.Publisher('ur3/command', command, queue_size=10)
+
+    # Initialize subscriber to ur3/position and callback fuction
+    # each time data is published
+    sub_position = rospy.Subscriber('ur3/position', position, position_callback)
+
+\end{verbatim}}
+
+To start as a ROS node the \textbf{rospy.init\_node()} function needs to be called.  Then the node needs to setup which other nodes it receives data from and which nodes\
+it sends data to.  This code first specifies that it will be publishing a message to the ``\textbf{ur3}" node ``\textbf{command}" subscriber.\
+The message it will be sending is the \textbf{command} message which consists of\
+the desired robot joint angles, the velocity of each joint and the acceleration of each joints.  Next \textbf{lab2node} subscribes to\
+``\textbf{ur3}" node ``\textbf{position}" publisher.  Whenever new joint angles are\
+ready to be sent, the callback function ``\textbf{position\_callback}" is called and passed the message \textbf{position} which\
+contains the six joint angles.
+As an exercise in lab, see if you can list the ``\textbf{ur3}" node and\
+``\textbf{command}" subscriber and ``\textbf{position}" publisher using the ``\textbf{rostopic list}" command in your \textbf{catkin\_ work directory}.  Also use ``\textbf{rostopic info}" to double\
+check that ``\textbf{command}" is ``\textbf{ur3}" subscriber and ``\textbf{position}" is a publisher.  Also run ``\textbf{rosmsg list}" to find the messages ``\textbf{ur3\_driver.msg.position}",\
+``\textbf{ur3\_driver.msg.command}".  
+
+{\footnotesize
+\begin{verbatim}   
+    input_done = 0
+    loop_count = 0
+
+    while(not input_done):
+        input_string = raw_input("Enter number of loops <Either 1 2 or 3> ")
+        print("You entered " + input_string + "\n")
+
+        if(int(input_string) == 1):
+            input_done = 1
+            loop_count = 1
+        elif (int(input_string) == 2):
+            input_done = 1
+            loop_count = 2
+        elif (int(input_string) == 3):
+            input_done = 1
+            loop_count = 3
+        else:
+            print("Please just enter the character 1 2 or 3 \n\n")
+	
+\end{verbatim}}
+
+This standard python code printing messages to the command prompt and recieving text input from the command prompt.  It loops until the correct data is input. 
+
+{\footnotesize
+\begin{verbatim}
+    # Check if ROS is ready for operation
+    while(rospy.is_shutdown()):
+        print("ROS is shutdown!")
+
+    rospy.loginfo("Sending Goals ...")
+	
+    loop_rate = rospy.Rate(SPIN_RATE)
+\end{verbatim}}
+
+Here the code waits for \textbf{roscore} to be executed and ready.  \textbf{rospy.loginfo} prints a message to the command prompt.  \textbf{rospy.Rate(SPIN\_RATE)} sets up a\
+class \textbf{loop\_rate} that can be used to sleep the calling process.  The amount of time that the process will sleep is determined by the \textbf{SPIN\_RATE} parameter.\
+In our case this is set to 20Hz or 50ms.  \textbf{loop\_rate} does not wake up 50 ms after it has been called, instead it wakes up the process every 50ms.  \textbf{loop\_rate}\
+keeps track of the last time it was called to determine how long to sleep the process to keep a consistent rate.    
+   
+{\footnotesize
+\begin{verbatim}
+    while(loop_count > 0):
+
+    #loop_count is the number of times to repeat the remaining code.  
+    #This value is entered by the user.
+
+        move_arm(pub_command, loop_rate, home, 4.0, 4.0)
+
+        rospy.loginfo("Sending goal 1 ...")
+        move_arm(pub_command, loop_rate, Q[0][0], 4.0, 4.0)
+
+        gripper(pub_command, loop_rate, suction_on)
+        # Delay to make sure suction cup has grasped the block
+        time.sleep(1.0)
+
+        rospy.loginfo("Sending goal 2 ...")
+        move_arm(pub_command, loop_rate, Q[0][1], 4.0, 4.0)
+
+        rospy.loginfo("Sending goal 3 ...")
+        move_arm(pub_command, loop_rate, Q[0][2], 4.0, 4.0)
+
+\end{verbatim}}
+
+This moves the arm to a number of positions to give you a start at how to program the robot to move to different positions.  See the move\_arm
+and gripper function definitions below.
+
+{\footnotesize
+\begin{verbatim}
+        loop_count = loop_count - 1
+\end{verbatim}}
+Repeat the moves \textbf{loop\_count} number of times.
+
+{\footnotesize
+\begin{verbatim}
+
+def move_arm(pub_cmd, loop_rate, dest, vel, accel):
+
+    global thetas
+    global SPIN_RATE
+
+    error = 0
+    spin_count = 0
+    at_goal = 0
+
+    driver_msg = command()
+    driver_msg.destination = dest
+    driver_msg.v = vel
+    driver_msg.a = accel
+    driver_msg.io_0 = current_io_0
+    pub_cmd.publish(driver_msg)
+
+    loop_rate.sleep() # 50ms
+
+    while(at_goal == 0):
+
+        if( abs(thetas[0]-driver_msg.destination[0]) < 0.0005 and \
+            abs(thetas[1]-driver_msg.destination[1]) < 0.0005 and \
+            abs(thetas[2]-driver_msg.destination[2]) < 0.0005 and \
+            abs(thetas[3]-driver_msg.destination[3]) < 0.0005 and \
+            abs(thetas[4]-driver_msg.destination[4]) < 0.0005 and \
+            abs(thetas[5]-driver_msg.destination[5]) < 0.0005 ):
+
+            at_goal = 1
+            #rospy.loginfo("Goal is reached!")
+		
+        loop_rate.sleep()
+
+        if(spin_count >  SPIN_RATE*5):
+            pub_cmd.publish(driver_msg)
+            rospy.loginfo("Just published again driver_msg")
+            spin_count = 0
+
+        spin_count = spin_count + 1
+
+    return error
+\end{verbatim}}
+
+The \textbf{move\_arm()} function takes as parameters \textbf{pub\_cmd}, which is the publisher to \textbf{ur3\_driver} commanding a new position for the robot to move
+to.  rate is the sleep rate this function will sleep in between checking if the robot has reached the commanded position.  This is necessary 
+so that other ROS processes are given processor time during \textbf{move\_arm}'s wait for the robot to get to the commanded position.  \textbf{dest} is the six 
+joint angle destinations, in radians, that the robot will be commanded to move to.  \textbf{vel} is the velocity that each joint will move going to
+the destination.  \textbf{accel} is the acceleration that each joint will move goint to the destination.  
+The code create a variable \textbf{driver\_msg} which is the command message to be sent \textbf{ur3\_driver}.  \textbf{driver\_msg} is assigned the destination, \textbf{dest},
+acceleration, \textbf{accel}, and velocity, \textbf{vel}.  In addition the state of the suction cup gripper, \textbf{current\_io\_0}, is assigned to \textbf{driver\_msg}.  This is the
+last state of the gripper, On or Off, commanded by the function \textbf{gripper()}.  Next the \textbf{driver\_msg} is published to \textbf{ur3\_driver} with the 
+\textbf{pub\_cmd.publish(driver\_msg)} instruction.  The \textbf{while(at\_goal == 0)} loop, loops until the robot arm has reached the commanded position or
+at least with in 0.0005 radians. If for some reason 
+the first publish does not send correctly, after five seconds the command is published again.  This will repeat until the robot arm reaches
+the commanded position.   
+
+{\footnotesize
+\begin{verbatim}
+def gripper(pub_cmd, loop_rate, io_0):
+
+    global SPIN_RATE
+    global thetas
+    global current_io_0
+    global current_position
+
+    error = 0
+    spin_count = 0
+    at_goal = 0
+
+    current_io_0 = io_0
+
+    driver_msg = command()
+    driver_msg.destination = current_position
+    driver_msg.v = 1.0
+    driver_msg.a = 1.0
+    driver_msg.io_0 = io_0   
+    pub_cmd.publish(driver_msg)
+
+    while(at_goal == 0):
+
+        if( abs(thetas[0]-driver_msg.destination[0]) < 0.0005 and \
+            abs(thetas[1]-driver_msg.destination[1]) < 0.0005 and \
+            abs(thetas[2]-driver_msg.destination[2]) < 0.0005 and \
+            abs(thetas[3]-driver_msg.destination[3]) < 0.0005 and \
+            abs(thetas[4]-driver_msg.destination[4]) < 0.0005 and \
+            abs(thetas[5]-driver_msg.destination[5]) < 0.0005 ):
+
+            at_goal = 1
+		
+        loop_rate.sleep()
+
+        if(spin_count >  SPIN_RATE*5):
+            pub_cmd.publish(driver_msg)
+            rospy.loginfo("Just published again driver_msg")
+            spin_count = 0
+
+        spin_count = spin_count + 1
+
+    return error
+\end{verbatim}}
+
+The \textbf{gripper()} function is very similar to the \textbf{move\_arm()} function above.  The same \textbf{pub\_cmd} and rate are passed to \textbf{gripper()} but only the On/Off
+desired state of the suction cup gripper is the remaining parameter.  Looking at the \textbf{move\_arm()} function \textbf{gripper()} looks very similar but the
+robot joint destination is the current state of the arm so the robot is already at that position so it does not move.  All that the command
+changes is whether the suction gripper is On or Off by setting \textbf{driver\_msg.io\_0} equal to the passed parameter \textbf{bool io\_0}.  See the \textbf{move\_arm()}
+description for more details on this code.    
+
+
+{\footnotesize
+\begin{verbatim}
+def move_block(pub_cmd, loop_rate, start_loc, \
+               start_height, end_loc, end_height, \
+               vel, accel):
+    error = 0
+    return error
+\end{verbatim}}
+
+The \textbf{move\_block()} function definition is provided and should be used to complete the assignment. Functions are useful when the same procedure is used many
+times.  To move a block, multiple arm movements are necessary along with gripper
+actuation. Instead of cluttering the main with many calls to \textbf{move\_arm} and \textbf{gripper()}, you will compartmentalize the calls in the \textbf{move\_block} function.
+Use this function to compartmentalize moving a block from one tower to another. 
+The start and end locations are integers given to tower positions and the heights are integers for blocks in the stack.
+
+
+
+%% Updated by Ben Walt
+\subsection{Report}
+Each partner will submit a lab report using the guidelines given in the “ECE 470: How to Write a Lab Report” document.  Please be aware of the following:
+\begin{itemize}
+	\item As this lab has been shortened to one week of class time, additional time will be given to complete it. Lab reports are due \textbf{two} weeks after the final session of Lab 2 - before your lab session!
+	\item Lab reports will be submitted online at \href{www.gradescope.com}{GradeScope}.
+\end{itemize}
+Your report should include the following:
+\begin{itemize}	
+	\item You have already explained Towers of Hanoi and your solution, so we don’t need to repeat that
+	\item What was the focus of this lab? (Hint: ROS and implementing feedback)
+	\item With that in mind you should cover the following (in detail):
+	\begin{itemize}
+		\item What is ROS and how does it work? (What kind of figure would help explain this?)
+		\item How did you use the ROS commands (i.e. \textbf{rostopic list}, \textbf{rostopic info}, etc.) to complete your task?
+		\item How did you implement feedback?
+	\end{itemize}
+	\item Make use of code snippets as needed to aid in your explanation
+	\item Re-Read “ECE 470: How to Write a Lab Report” carefully so you know all the requirements
+	\item Unless your TA gives other guidance, include your \textbf{lab2\_exec.py} code as an Appendix to your report	
+\end{itemize}
+%% End Update
+
+\section{Demo}
+Your TA will require you to run your program twice; on each run, the TA will specify a different set of start and destination locations for the tower.
+
+\section{Grading}
+\begin{itemize}
+\item 20 points, by the end of the two hour lab session, show your TA that your ROS program moving the UR3 to the three Tower of Hanoi stack locations, and it is able to subscribe to the ROS node publishing the input status of the 
+suction cup gripper.
+\item 60 points, successful demonstration.
+\item 20 points, report.
+\end{itemize}

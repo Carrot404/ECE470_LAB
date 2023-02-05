@@ -1,0 +1,110 @@
+\documentclass[oneside]{book}
+\usepackage[pdftex]{graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{afterpage}
+\usepackage{todonotes}
+\usepackage{amsmath}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[RO,LE]{}
+
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{hyperref}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=black
+}
+
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks% save the current one
+  \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
+  \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
+  \do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
+  \do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
+  \do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
+  \do\Y\do\Z\do\*\do\-\do\~\do\'\do\"\do\-}%
+
+\newcommand{\figlbl}[1]{\label{fig:#1}}
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\curlies}[1]{\{ {#1} \} }
+\newcommand{\bs}[0]{$\backslash$}
+\renewcommand\chaptername{LAB}  
+\setlength{\parindent}{0pt}
+
+\evensidemargin=55pt
+\oddsidemargin=55pt
+
+\begin{document}
+
+\frontmatter
+\begin{titlepage}
+
+\begin{center}
+\Huge{\textbf{ECE 470}} \\
+\Huge{\textbf{Introduction to Robotics}} \\
+\Huge{\textbf{Lab Manual}} \\
+\small{ZJUI ver 3.0}
+\vfill
+
+	\includegraphics[scale=0.5]{image/Lab_ur3-robot-flexible-table-top-robot-big.jpg}
+
+\vfill
+\Large \textit{Liangjing Yang} \\
+\Large \textit{Songjie Xiao} \\
+\Large \textit{Tiexin Wang} \\
+\Large \textit{Tengyue Wang}	\\
+\Large \textit{Zhefan Lin}	\\
+\Large \textit{Zheyuan Zhang}
+
+\vspace{1cm}
+\Large{Zhejiang University/University of Illinois at Urbana-Champaign}\\
+\vspace{0.25cm}
+\small{UR3e Python - ROS Interface}\\
+\vspace{1cm}
+\end{center}
+\small{Modified from ECE470: Introduction to Robotics from University of Illinois at Urbana-Champaign
+http://coecsl.ece.illinois.edu/ece470}
+\end{titlepage}
+
+%\chapter*{Acknowledgements}
+%None of labs 2 through 6 would be possible without the work of Daniel Herring, the previous teaching assistant for the course who rewrote the bug-ridden Rhino interface.  I am also indebted to Robert Tao who compiled all of the lab assignments and appendices into one cohesive document and who patiently endured many formatting revisions to this manual.  I am grateful to Professor Seth Hutchinson for the privilege of working with him in 2004 and 2005 as he served as the course instructor.  It was Professor Hutchinson who suggested rewriting the lab assignments and merging them into a single lab manual.  Finally, thanks are due to the students in Introduction to Robotics who suffered through multiple drafts of each lab assignment and provided helpful feedback throughout the course.
+
+\pagenumbering{roman}
+
+\tableofcontents
+
+
+\chapter*{Preface}
+This is a set of laboratory assignments designed to complement the introductory robotics lecture taught in the College of Engineering at the University of Illinois at Urbana-Champaign.  Together, the lecture and labs introduce students to robot manipulators and computer vision along with the Robot Operating System (ROS) and serve as the foundation for more advanced courses on robot dynamics, control and computer vision.  The course is cross-listed in three departments (Electrical \& Computer Engineering, Aerospace Engineering, and Mechanical Science \& Engineering) and consequently includes students from a variety of academic backgrounds. \\
+
+For success in the laboratory, each student should have completed a course in linear algebra and be comfortable with three-dimensional geometry.  In addition, it is imperative that all students have completed a freshman-level course in computer programming.  \textit{MODERN ROBOTICS
+MECHANICS, PLANNING, AND CONTROL} (Kevin M. Lynch and Frank C. Park, 2017) is required for the lectures and will be used as a reference for many of the lab assignments.  We will hereafter refer to the textbook as \textit{MR} in this lab manual. \\
+
+These laboratories are simultaneously challenging, stimulating, and enjoyable.  It is the author's hope that you, the reader, share a similar experience.\\
+
+Enjoy the course! 
+\thispagestyle{empty}
+
+\mainmatter
+\include{lab1}
+\include{lab2}
+\include{lab3}
+\include{lab4}
+\include{lab5}
+%\setcounter{chapter}{4}
+\include{lab6}
+
+\include{lab7}
+
+\appendix
+\include{appendixA}
+% \include{appendixB}
+\include{appendixC}
+\include{appendixD}
+
+\end{document}

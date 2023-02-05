@@ -4,7 +4,4 @@
 *.out
 *.toc
 *.synctex.gz
-old_files
 
-tex
-doc

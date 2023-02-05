@@ -1,0 +1,221 @@
+\chapter{Forward Kinematics}
+\section{Important}
+Read the entire lab before starting and especially the "Grading" section as there are points you will receive by completing certain sections or checkpoints
+by the end of the lab session(s). 
+\section{Objectives}
+The purpose of this lab is to implement the exponential forward kinematics on the UR3 robot to estimate the end-effector pose given a set of joint angles.  In this lab you will:
+\begin{itemize}
+	\item Solve the exponential forward kinematic equations for the UR3.
+	\item Write a Python function that moves the UR3 to a configuration specified by the user.
+	\item Compare your exponential forward kinematic estimation with the actual robot movement. 
+\end{itemize}
+
+\section{References}
+\begin{itemize}
+\item Chapter 4 of \textit{Modern Robotics} provides details of how to construct an exponential forward kinematic for an open-chain robot.
+\end{itemize}
+
+\section{Tasks}
+
+\subsection{Theoretical Solution}
+Find the forward kinematic equations for the UR3 robot using the exponential forward kinematics method.  Solve for $T_6^0$ and record the 3-by-1 translation vector from the end-effector frame to the base frame, $d^0_6$.
+
+\subsection{Physical Implementation}
+The user will provide six joint angles $\left\{\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6\right\}$, all given in degrees.  The angle\
+ranges are as follows:
+
+\begin{eqnarray*}
+-45^{\circ}<\theta_1<45^{\circ}\\
+-180^{\circ}<\theta_2<0^{\circ}\\
+-20^{\circ}<\theta_3<140^{\circ}\\
+-170^{\circ}<\theta_4<-5^{\circ}\\
+-140^{\circ}<\theta_5<70^{\circ}\\
+180^{\circ}<\theta_6<0^{\circ}
+\end{eqnarray*}
+
+Then using a ROS Python program move the joints to these desired angles.  Your program should additionally calculate and display the translation\
+matrix $T_6^0$ that rotates and translates the end effector's coordinate frame to the base frame.
+
+\subsection{Comparison}
+For any provided set of joint angles $\left\{\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6\right\}$, roughly compare with a ruler and square\
+the position of the suction cup gripper to the value calculated by your Python forward kinematics function.  
+
+\section{Procedure}
+	
+\subsection{Theoretical Solution}
+\begin{enumerate}
+\item In exponential forward kinematics (especially for an open chain kinematics), there are three components that are essential for the calculation.
+    \begin{itemize}
+    \item A fixed base frame $f_0$
+    \item Robot’s “zero” configuration (or some might call it initial position)
+    \item A well-defined end-effector frame $f_6$
+    \end{itemize}
+
+Virtually, You can define the base frame, the end-effector frame, and zero configuration arbitrarily. As long as you remain consistent with your definitions, the end results will be identical for the same robot. However, doing so will post difficulties when your TA tries to verify your answer or debug your process. Therefore we encourage you to use the same frame placement and zero configuration for both convenience and safety purposes. See \figref{UR3EX}.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[height=3.4in]{lab4_ur3_zero_to_end.jpg}
+	\caption{\figlbl{UR3EX} “zero” configuration and frame placement for UR3.}
+\end{figure}
+
+Moreover, please note that in this lab, all the UR3 robots have a pre-defined zero configuration. The pose shown in \figref{UR3EX} is \textbf{NOT the TRUE zero configuration} according to the teach pendant. In this pose (\figref{UR3EX}), you would read the following joint angles from \textbf{the teach pendant}:
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+\hline
+Joint 1 & Joint 2 & Joint 3 & Joint 4 & Joint 5 & Joint 6\\
+\hline
+\multirow 180.0$^{\circ}$ & 0.0$^{\circ}$ & 0.0$^{\circ}$ & -90.0$^{\circ}$ & 0.0$^{\circ}$ & 0.0$^{\circ}$\\ 
+\hline
+\end{tabular}
+\end{center}
+In the  \textbf{teach pendant's} zero configuration, (due to how the robot is originally mounted) the robot arm would face the far edge of the table and the wrist joint #2 would point into the table, which is an awkward pose to make measurements and do experiments. Hence, we added some angle offsets in the function script such that:
+
+\begin{lstlisting}
+	return_value[0] = theta1 + PI
+	return_value[1] = theta2
+	return_value[2] = theta3
+	return_value[3] = theta4 - (0.5*PI)
+	return_value[4] = theta5
+	return_value[5] = theta6
+\end{lstlisting}
+
+\textbf{Any joint angle measurements from the robot that are passed to your ROS program will be corrected to the “zero” configuration shown in \figref{UR3EX}.}
+In other words, now if you set all the joint of UR3 to zero (zero configuration) in \textbf{ROS}:
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c| } 
+\hline
+Joint 1 & Joint 2 & Joint 3 & Joint 4 & Joint 5 & Joint 6\\
+\hline
+\multirow 0.0$^{\circ}$ & 0.0$^{\circ}$ & 0.0$^{\circ}$ & 0.0$^{\circ}$ & 0.0$^{\circ}$ & 0.0$^{\circ}$\\ 
+\hline
+\end{tabular}
+\end{center}
+You would see the UR3 poses as \figref{UR3EX} showed.
+
+\item The sole purpose of the forward kinematics algorithm is to estimate the end-effector's pose (orientation and position) with respect to the base frame given a set of joint angles. This information can be packed and calculated in a “homogeneous transformation matrix” taught by Lynch & Park in \textit{Modern Robotics}:
+\begin{center}
+\begin{equation*}
+T(\theta) = e^{[S_1]\theta_1} e^{[S_2]\theta_2}...... e^{[S_{n-1}]\theta_{n-1}} e^{[S_n]\theta_n} M
+\end{equation*}
+\end{center}
+
+While our objective is to solve for the homogeneous transformation matrix $T(\theta)$ of the “motion” caused by certain joint angle configurations, there are seven matrices we need to specify:
+    \begin{itemize}
+    \item The screw axes $S_1$ to $S_6$ (we have six here because UR3 has six joints) expressed in the base frame, corresponding to the joint motions when the robot is at its zero configuration (aka \figref{UR3EX})
+    \item The end-effector pose M (a 4x4 homogeneous transformation matrix) with respect to the base frame, corresponding to the zero configuration
+    \end{itemize}
+A screw axis S can be represented by $S=(\omega,v)$, where the $\omega$ is the joint axis defined by the \textbf{right hand rule} (\figref{hand}). $v$ can be computed by $v= -\omega \times q$, where q is the displacement (position) of the joint center with respect to the base frame.
+\begin{figure}[t]
+	\centering
+		\includegraphics[scale=1]{lab4_hand.png}
+	\caption{\figlbl{hand}The "right hand rule"}
+\end{figure}
+
+\end{enumerate}
+
+\subsection{Implementation on UR3}
+\begin{enumerate}
+\item Download and extract \textbf{lab4Py.tar.gz} into the ``\textbf{src}" directory of your catkin directory.  Don't forget ``\textbf{source devel/setup.bash}".  Then from your base catkin\
+directory run ``\textbf{catkin\_make}" and if you receive no errors you copied your lab4 starter code correctly.  Also so that ROS registers this new package ``\textbf{lab4pkg\_py}",
+run ``\textbf{rospack list}" and you should see \textbf{lab4pkg\_py} as one of the many packages.
+\item You will notice that in \textbf{lab4pkg\_py/scripts} there are now three *.py files.  \textbf{lab4\_exec.py} is the main() code, \textbf{lab4\_func.py} defines the important
+forward kinematic functions. \textbf{lab4\_header.py} defines the header files.  We divide them up in this fashion so that the forward kinematic functions can easily be used in the remaining labs.  This way you will be creating, in a sense, a library that you can include in your next labs to call the forward kinematic calculations.  In this lab you will be mainly editing
+\textbf{lab4\_func.py}.  You can of course change \textbf{lab4\_exec.py} but most of its functionality has already been given to you.  Study the code and comments in
+\textbf{lab4\_exec.py} and \textbf{lab4\_func.py} to see what the starter code is doing and what parts you are going to need to change. Your job is to add the code in function \textbf{Get\_MS()} that
+correctly populates the six screw axes $S_1$ to $S_6$ as well as the transformation matrix M.  The Python code uses the ``numpy" module to create and multiply matrixes; meanwhile, matrix exponential ``expm()" is achieved by including ``Scipy" module.  Then, with the S and M values you populated, write the code in function \textbf{lab\_fk()} that generates and prints the homogeneous transformation matrix $T(\theta)$.
+
+\item Once your code is finished and compiled, run it using `` \textbf{rosrun lab4pkg\_py lab4\_exec.py [theta1] [theta2] [theta3] [theta4] [theta5] [theta6]}" with all angles in
+degrees.  Remember that in another command prompt you should have first ran roscore and drivers using
+`` \textbf{roslaunch ur3\_driver ur3\_driver.launch}"
+
+\end{enumerate}
+\subsection{Comparison}
+\begin{enumerate}
+\item Your TA will select two sets of joint angles $\left\{\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6\right\}$ when you demonstrate\
+your working ROS program.  
+\item Run your ROS node and move the UR3 to each of these configurations.  With a ruler and square, measure the x,y,z position vector of the center\
+of the gripper for each set of angles. (Note: The aluminum base that UR3 sits on is a 300mm x 300mm square. You can use it as your reference if you find measuring from the base of UR3 being difficult.)  Call these vectors $r_1$ and $r_2$ for the first and second sets of joint angles, respectively.
+
+\item Compare these hand measurements to the translation vector calculated by your ROS node.  
+Call these calculated vectors $d_1$ and $d_2$.	
+
+\item For each set of joint angles, Calculate the error between the measured and calculated kinematic solutions.  We will consider the error to\
+be the magnitude of the distance between the measured center of the gripper and the location predicted by the forward kinematic equation:
+\[
+error_1 = \left\| r_1 - d_1 \right\| = \sqrt{(r_{1x}-d_{1x})^2 + (r_{1y}-d_{1y})^2 + (r_{1z}-d_{1z})^2}.
+\]
+A similar expression holds for $error_2$.
+\end{enumerate}
+
+\section{Report}
+Each partner will submit a lab report using the guidelines given in the ECE 470: How to Write a Lab Report document.  Please be aware of the following:
+\begin{itemize}
+    \item Lab reports are due one week after the final session of Lab 4 - before your lab session!
+    \item Lab reports will be submitted online at \href{https://www.gradescope.com}{GradeScope}.
+\end{itemize}
+Your lab report should include the following:
+\begin{itemize}
+\item Coversheet containing your name and then your partner's names, ``Lab 4'', and the weekday and time your lab section meets (for example, ``Tuesday, 3pm'').
+\item Explain how you determined $\mathcal{S}_{1}$ thru $\mathcal{S}_{6}$ and $\textbf{M}$ - include figures as needed.
+\item Include a figure that shows all frames and axes used.
+\item Include a table of all $\omega$ and $q$ used and the $v$ derived.
+
+ \item Use Matlab's symbolic toolbox to generate the final homogeneous transform $T^{0}_{6}$ as a function of $\left(\theta_{1},\theta_{2},\theta_{3},\theta_{4},\theta_{5},\theta_{6}\right)$ and include the calculated $d^{0}_{6}$ in your report.\\
+
+\[
+T^0_6(\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6) = \left[
+\begin{tabular}{cc}
+$R^0_6(\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6)$ & $d^0_6(\theta_1,\theta_2,\theta_3,\theta_4,\theta_5,\theta_6)$ \\
+0 0 0 & 1
+\end{tabular}
+\right]
+\]
+\item Substitute in your given joint angles to verify your solution.
+    \item For each test point, include:
+    \begin{itemize}
+        \item The given $\left(\theta_{1},\theta_{2},\theta_{3},\theta_{4},\theta_{5},\theta_{6}\right)$
+        \item The calculated $d$ and measured $r$ vectors
+        \item The scalar error
+    \end{itemize}
+    \item Include a brief discussion of sources of error.
+\end{itemize}
+As appendices to your report, include the following:
+\begin{itemize}
+    \item Your $\textbf{lab4\_func.py}$ code and $\textbf{lab4\_exec.py}$ if it was edited.
+    \item Your Matlab code used to calculate $T^{0}_{6}$.
+\end{itemize}
+
+
+\section{Demonstration}
+Your TA will require you to run your program twice, each time with a different set of joint variables.
+
+\section{Grading}
+\begin{itemize}
+\item 10 points, by the end of the first two hour lab session, show your completed \textbf{Get\_MS()} function to your TA.  
+\item 10 points, by the end of the second two hour lab session, show your TA an attempt of your code trying to move the robot to a desired position.
+\item 60 points, successful demonstration.
+\item 20 points, individual report.  
+\end{itemize}
+
+\begin{figure}[t]
+	\centering
+		\includegraphics[height=3.4in]{lab4_ur3_forwardkin1.jpg}
+	\caption{\figlbl{UR3SA} Screw axes on UR3.}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+		\includegraphics[height=3.4in]{lab4_ur3_forwardkin.jpg}
+	\caption{\figlbl{UR3JC} Joint center locations on UR3.}
+\end{figure}
+
+\begin{figure}[t]
+	\centering
+		\includegraphics[height=6in]{lab4_UR3Dimensions.png}
+	\caption{\figlbl{UR3Dim} Approximate Dimensions of the UR3 in mm. *EACH UR3 IS SLIGHTLY DIFFERENT DUE TO ITS MANUFACTURE TOLERANCE.}
+\end{figure}
+
+
+
