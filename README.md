@@ -2,9 +2,24 @@
 
 This repo provides code and manual for ECE470: Introduction to Robotics.
 
+## 1. Lab schedule
 
+1. Lab1: Pick and Place experiment through Teach Pendent to solve Hanoi problem
+2. Lab2: Get started with ROS (Node, Topic, Message) by Turtlesim
+3. Lab3: The Tower of Hanoi with ROS
+4. Lab4: Forward Kinematics of UR3e
+5. Lab5: Inverse Kinematics of UR3e
+6. Lab6: Image Processing (filtering, edge detection, segmentation and classification)
+7. Lab7: Camera Calibration
 
+## 2. Important
 
+Due to **limited** time of lab session, it is strongly **recommended** to get prepared for lab session.
+
+1. read lab manual before session and know what to do 
+2. It is **encouraged** to complete your code before lab. 
+
+> Any questions are welcomed.
 
 ## 3. Ubuntu and ROS (Optional)
 
@@ -15,48 +30,14 @@ if some of you guys want to debug in your own laptop, it is recommended to insta
 1. Download VMware Workstation [here](https://www.vmware.com/cn/products/workstation-pro/workstation-pro-evaluation.html). Other virtual machine software (like VirtualBox) is fine. Recommended version: 16 Pro or 15 Pro.
 2. Install it and activate license by yourself.
 
-### 3.2 Ubuntu 20.04
+### 3.2 Ubuntu 20.04 & ROS
 
 1. Download ubuntu **Desktop** image (.iso) in official website [here](http://www.releases.ubuntu.com/20.04/) or [Tsinghua Mirror](https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/20.04.5/).
 2. Open VMware and create a new virtual machine.
-3. Follow the steps in [ubuntu_install.md](./reference/ubuntu_install.md) in `reference` folder.
+3. Follow the steps in [install.md](./reference/install.md) in `reference` folder.
 
-### 3.3 ROS 
+## 4. TODO
 
-1. update source
-
-```bash
-sudo apt update 
-sudo apt upgrade
-```
-
-2. install ROS
-
-```bash
-# add ROS source
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-# or Tsinghua source
-sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ focal main" > /etc/apt/sources.list.d/ros-latest.list'
-# add ROS key
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-# install ros
-sudo apt update 
-sudo apt install ros-noetic-desktop-full
-# add path to bashrc
-echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-source ~/.bashrc
-# test ros
-roscore
-# started core service
-```
-
-3. install Universal_Robot package
-
-```bash
-sudo apt install ros-noetic-ur-msgs
-sudo apt install ros-noetic-ur-gazebo
-sudo apt install ros-noetic-ur-description
-sudo apt install ros-noetic-ur-client-library
-```
-
-> Problems may occur when you install all these things. Feel free to ask TAs for help if you can not solve them.
+- [ ] modify `lab6_manual` and `lab7_manual`
+- [ ] integrate camera snapshot into ROS for convenience
+- [ ] and more...

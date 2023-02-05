@@ -1,6 +1,6 @@
-# Ubuntu_Install
+# Ubuntu & ROS
 
-## 1. Install system
+## 1. Install Ubuntu
 
 1. create a new virtual machine and choose customized.
 
@@ -82,3 +82,44 @@
 
 ![](../image/ubuntu_step20.jpg)
 
+
+
+## 2. Install ROS
+
+1. update source
+
+```bash
+sudo apt update 
+sudo apt upgrade
+```
+
+2. install ROS
+
+```bash
+# add ROS source
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+# or Tsinghua source
+sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ focal main" > /etc/apt/sources.list.d/ros-latest.list'
+# add ROS key
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+# install ros
+sudo apt update 
+sudo apt install ros-noetic-desktop-full
+# add path to bashrc
+echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+# test ros
+roscore
+# started core service
+```
+
+3. install Universal_Robot package
+
+```bash
+sudo apt install ros-noetic-ur-msgs
+sudo apt install ros-noetic-ur-gazebo
+sudo apt install ros-noetic-ur-description
+sudo apt install ros-noetic-ur-client-library
+```
+
+> Problems may occur when you install all these things. Feel free to ask TAs for help if you can not solve them.
