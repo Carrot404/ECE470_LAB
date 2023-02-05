@@ -90,24 +90,24 @@ class Camera():
         # contour detection and make sure every contour available
         # Tips: cv2.contourArea(contour) as threshold
 
-        img_blur = cv2.bilateralFilter(img_copy, 29, 70, 200)
-        img_blur = cv2.medianBlur(img_blur, 9)
+        pass
 
-        img_gray = cv2.cvtColor(img_blur, cv2.COLOR_BGR2GRAY)
-        x_grid = cv2.Sobel(img_gray, cv2.CV_16SC1, 1, 0)
-        y_grid = cv2.Sobel(img_gray, cv2.CV_16SC1, 0, 1)
-        img_canny = cv2.Canny(x_grid, y_grid, 50, 150) 
 
-        cv2.imshow('Canny image', img_canny)
-        cv2.waitKey()
-        cv2.destroyAllWindows()
 
-        contours, hierarchy = cv2.findContours(img_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        len_con = len(contours)
-        for i in range(len_con):
-            area = cv2.contourArea(contours[len_con-1-i])
-            if area < 500 :
-                contours.pop(len_con-1-i)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         ############### Your Code End Here ###############
 
@@ -126,17 +126,18 @@ class Camera():
 
                 # cv2.circle(draw_img, (int(center_x), int(center_y)), 7, [0,0,255], -1)
 
-                M = cv2.moments(contours[i * 2])
-                center_x = int(M["m10"] / M["m00"])
-                center_y = int(M["m01"] / M["m00"])
-                cv2.circle(self.img, (int(center_x), int(center_y)), 7, [0,0,255], -1)
-                center_value.append([center_x, center_y])
+                pass
 
-                ret_1 = cv2.matchShapes(contours[i * 2], self.contours_rect[0], 1, 0.0)
-                ret_2 = cv2.matchShapes(contours[i * 2], self.contours_elip[0], 1, 0.0)
-                ret = np.array([ret_1, ret_2])
-                shape.append(np.argmin(ret))
-                
+
+
+
+
+
+
+
+
+
+
                 ############### Your Code End Here ###############
 
             else:
@@ -154,14 +155,23 @@ class Camera():
 
                 # cv2.line(draw_img, (_center_x, _center_y), (x, y), (128, 0, 0), 2)
 
-                center = np.array([center_x, center_y])
-                index = np.argmax(np.sum(np.square(contours[i * 2][:, 0, :] - center), axis=1))
-                x, y = contours[i * 2][:, 0, :][index][0], contours[i * 2][:, 0, :][index][1]
-                cv2.line(self.img, (_center_x, _center_y), (x, y), (128, 0, 0), 2)
-                _x = contours[i * 2][:, 0, :][index][0] - _center_x
-                _y = contours[i * 2][:, 0, :][index][1] - _center_y
-                
-                theta.append(np.arctan2(_y,_x))
+                pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
                 ############### Your Code End Here ###############
 
@@ -176,28 +186,18 @@ def coordinate_transform(center_cam, center_robot, center_snap):
     # TODO: transform camera coordinate to robot coordinate
     # Tip: center_value: [[Object1],[Object2],...]
 
-    x1_c = center_cam[0][0]
-    y1_c = center_cam[0][1]
-    x2_c = center_cam[1][0]
-    y2_c = center_cam[1][1]
+    pass
 
-    x1_r = center_robot[0][0]
-    y1_r = center_robot[0][1]
-    x2_r = center_robot[1][0]
-    y2_r = center_robot[1][1]
 
-    x_ratio = (x2_r - x1_r) / (y2_c - y1_c)
-    y_ratio = (y2_r - y1_r) / (x2_c - x1_c)
 
-    center_snap_robot = []
 
-    for i, j in center_snap:
-        x = x1_r + x_ratio * (j - y1_c)
-        y = y1_r + y_ratio * (i - x1_c)
-        center_snap_robot.append([x, y])
 
-    return center_snap_robot
 
+
+
+
+
+    
     ############### Your Code End Here ###############
 
 
