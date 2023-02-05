@@ -1,69 +1,116 @@
+#!/usr/bin/env python
+
+#########################################################################
+#
+#  Lab 6-Image Processing
+#  Main task is to pick and place all the blocks to your destination.
+#  Camera is used to detect blocks. With image processing methods, 
+#  robot is able to know the position, shape and orientation of the blocks.
+#  Since block's position is based on image coordinate, what we should do
+#  is to transform it into robot coordinate. (refer to manual)
+#
+#########################################################################
+
+import rospy
+import rospkg
+import os
 import math
 import cv2
 import numpy as np
-import rospkg
-import os
 
 class Camera():
-    def __init__(self,save_imgpath):
-        self.save_imgpath = save_imgpath
+    def __init__(self, img_path):
 
-    def read_image(self):
-        img = cv2.imread(self.save_imgpath)
-        return img
+        rospack = rospkg.RosPack()
+        lab6_path = rospack.get_path('lab6pkg_improc')
 
-    def image_process(self, img):
-        if img is None:
+        self.img_path = os.path.join(lab6_path, 'img', img_path)
+        self.img = cv2.imread(self.img_path)
+        if self.img is None:
+            print('Image is None, Please check image path!')
+
+        self.temp_path = os.path.join(lab6_path, 'img', 'template.jpg')
+        self.img_temp = cv2.imread(self.temp_path)
+        if self.img_temp is None:
+            print('Template Image is None, Please check image path!')
+        
+    def template_process(self):
+
+        if self.img_temp is None:
+            print('Template Image is None, Please check image path!')
             return
-        draw_img = img.copy()
+
+        temp_copy = self.img_temp.copy()
+
+        # Bilateral Filter smooths images while preserving edges,
+        # by means of a nonlinear combination of nearby image values.
+        # cv2.bilateralFilter(src, d, sigmaColor, sigmaSpace)
+        # d - Diameter of each pixel neighborhood that is used during filtering.
+
+        temp_blur = cv2.bilateralFilter(temp_copy, 19, 130, 30)
+        temp_blur = cv2.medianBlur(temp_blur, 9)
+
+        temp_gray = cv2.cvtColor(temp_blur, cv2.COLOR_BGR2GRAY)
+        x_grid = cv2.Sobel(temp_gray, cv2.CV_16SC1, 1, 0)
+        y_grid = cv2.Sobel(temp_gray, cv2.CV_16SC1, 0, 1)
+        temp_canny = cv2.Canny(x_grid, y_grid, 30, 220)
+
+        # show image using the code below
+        # cv2.imshow('canny image', temp_canny)
+        # cv2.waitKey()
+        # cv2.destroyAllWindows()
+
+        weight, height = temp_canny.shape
+        temp_rect = temp_canny[:, :weight]
+        temp_elip = temp_canny[:, weight:]
+
+        # cv2.findContours to find contour
+        # variable contours_1 stores all contours, each of which is composed of
+        # a series of pixel point 
+        # For example: len(contours) contours[0] 
+        # rectangle
+        self.contours_rect, hierarchy = cv2.findContours(temp_rect, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # elipse
+        self.contours_elip, hierarchy = cv2.findContours(temp_elip, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        
+
+
+    def image_process(self):
+
+        self.template_process()
+
+        if self.img is None:
+            print('Image is None, Please check image path!')
+            return
+        
+        img_copy = self.img.copy()
 
         ############## Your Code Start Here ##############
         # TODO: image process including filtering, edge detection, 
         # contour detection and make sure every contour available
         # Tips: cv2.contourArea(contour) as threshold
 
-        
+        img_blur = cv2.bilateralFilter(img_copy, 29, 70, 200)
+        img_blur = cv2.medianBlur(img_blur, 9)
+
+        img_gray = cv2.cvtColor(img_blur, cv2.COLOR_BGR2GRAY)
+        x_grid = cv2.Sobel(img_gray, cv2.CV_16SC1, 1, 0)
+        y_grid = cv2.Sobel(img_gray, cv2.CV_16SC1, 0, 1)
+        img_canny = cv2.Canny(x_grid, y_grid, 50, 150) 
+
+        cv2.imshow('Canny image', img_canny)
+        cv2.waitKey()
+        cv2.destroyAllWindows()
+
+        contours, hierarchy = cv2.findContours(img_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        len_con = len(contours)
+        for i in range(len_con):
+            area = cv2.contourArea(contours[len_con-1-i])
+            if area < 500 :
+                contours.pop(len_con-1-i)
 
         ############### Your Code End Here ###############
 
-
-        # template preprocess 
-        rospack = rospkg.RosPack()
-        lab5_path = rospack.get_path('lab5pkg_py')
-        img_path = os.path.join(lab5_path, 'scripts', 'example.jpg')
-        _img = cv2.imread(img_path)
-        _draw_img = _img.copy()
-
-        # Bilateral Filter smoothes images while preserving edges,
-        # by means of a nonlinear combination of nearby image values.
-        # cv2.bilateralFilter(src, d, sigmaColor, sigmaSpace)
-        # d - Diameter of each pixel neighborhood that is used during filtering.
-        _blur = cv2.bilateralFilter(_img, 19, 130, 30)
-        _blur = cv2.medianBlur(_blur, 9)
-
-        _img_gray = cv2.cvtColor(_blur, cv2.COLOR_BGR2GRAY)
-        _xgrd = cv2.Sobel(_img_gray, cv2.CV_16SC1, 1, 0)
-        _ygrd = cv2.Sobel(_img_gray, cv2.CV_16SC1, 0, 1)
-        _img = cv2.Canny(_xgrd, _ygrd, 30, 220)
-
-        # Here we obtain the edge, then show using code below
-        # cv2.imshow('1', img)
-        # cv2.waitKey()
-        # cv2.destroyAllWindows()
-        
-        _w, _h = _img.shape
-        _img_1 = _img[:, :_w]
-        _img_2 = _img[:, _w:]
-
-        # cv2.findContours to find contour
-        # variable _contours_1 stores all contours, each of which is composed of
-        # a series of pixel point 
-        # For example: len(contours) contours[0] 
-        # rectangle
-        _img_1, _contours_1, hierarchy = cv2.findContours(_img_1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        # circle
-        _img_2, _contours_2, hierarchy = cv2.findContours(_img_2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        
     
         ############## Your Code Start Here ##############
         # TODO: compute the center of contour and the angle of your object,
@@ -78,8 +125,17 @@ class Camera():
                 # Tips: ret = cv2.matchShapes(contour1, contour2, 1, 0.0) 
 
                 # cv2.circle(draw_img, (int(center_x), int(center_y)), 7, [0,0,255], -1)
-                cv2.circle(draw_img, (int(center_x), int(center_y)), 7, [0,0,255], -1)
-                
+
+                M = cv2.moments(contours[i * 2])
+                center_x = int(M["m10"] / M["m00"])
+                center_y = int(M["m01"] / M["m00"])
+                cv2.circle(self.img, (int(center_x), int(center_y)), 7, [0,0,255], -1)
+                center_value.append([center_x, center_y])
+
+                ret_1 = cv2.matchShapes(contours[i * 2], self.contours_rect[0], 1, 0.0)
+                ret_2 = cv2.matchShapes(contours[i * 2], self.contours_elip[0], 1, 0.0)
+                ret = np.array([ret_1, ret_2])
+                shape.append(np.argmin(ret))
                 
                 ############### Your Code End Here ###############
 
@@ -89,7 +145,7 @@ class Camera():
                 _center_x = int(N["m10"] / N["m00"])
                 _center_y = int(N["m01"] / N["m00"])
                 # draw a circle on the center point
-                cv2.circle(draw_img, (int(_center_x), int(_center_y)), 7, [0,255,0], -1)
+                cv2.circle(self.img, (int(_center_x), int(_center_y)), 7, [0,255,0], -1)
 
                 ############## Your Code Start Here ##############
                 # TODO: compute the angle of your object
@@ -98,58 +154,88 @@ class Camera():
 
                 # cv2.line(draw_img, (_center_x, _center_y), (x, y), (128, 0, 0), 2)
 
+                center = np.array([center_x, center_y])
+                index = np.argmax(np.sum(np.square(contours[i * 2][:, 0, :] - center), axis=1))
+                x, y = contours[i * 2][:, 0, :][index][0], contours[i * 2][:, 0, :][index][1]
+                cv2.line(self.img, (_center_x, _center_y), (x, y), (128, 0, 0), 2)
+                _x = contours[i * 2][:, 0, :][index][0] - _center_x
+                _y = contours[i * 2][:, 0, :][index][1] - _center_y
                 
+                theta.append(np.arctan2(_y,_x))
             
                 ############### Your Code End Here ###############
 
-        cv2.imshow('2', draw_img)
+        cv2.imshow('image with center and orientation', self.img)
         cv2.waitKey()
         cv2.destroyAllWindows()
         return center_value, shape, theta
 
-def coordinate_transform(center_cam, center_robot, center_value):
+def coordinate_transform(center_cam, center_robot, center_snap):
+
     ############## Your Code Start Here ##############
     # TODO: transform camera coordinate to robot coordinate
     # Tip: center_value: [[Object1],[Object2],...]
 
-    pass
+    x1_c = center_cam[0][0]
+    y1_c = center_cam[0][1]
+    x2_c = center_cam[1][0]
+    y2_c = center_cam[1][1]
+
+    x1_r = center_robot[0][0]
+    y1_r = center_robot[0][1]
+    x2_r = center_robot[1][0]
+    y2_r = center_robot[1][1]
+
+    x_ratio = (x2_r - x1_r) / (y2_c - y1_c)
+    y_ratio = (y2_r - y1_r) / (x2_c - x1_c)
+
+    center_snap_robot = []
+
+    for i, j in center_snap:
+        x = x1_r + x_ratio * (j - y1_c)
+        y = y1_r + y_ratio * (i - x1_c)
+        center_snap_robot.append([x, y])
+
+    return center_snap_robot
 
     ############### Your Code End Here ###############
 
 
-def ImgProcess(_test1, _test2, center_robot, _img):
+def ImgProcess(img_cali1, img_cali2, center_robot, img_snap):
+
     # Step1 Camera Calibration and transform camera coordinate to robot coordinate
     # save two snapshots, get the coordinate of center in two coordinate system (camera and robot)
 
-    test1 = Camera(_test1)
-    image1 = test1.read_image()
-    center_cam1, shape1, theta1 = test1.image_process(image1)
+    cam_cali1 = Camera(img_cali1)
+    center_cali1, shape_cali1, theta_cali1 = cam_cali1.image_process()
 
-    test2 = Camera(_test2)
-    image2 = test2.read_image()
-    center_cam2, shape2, theta2 = test2.image_process(image2)
+    cam_cali2 = Camera(img_cali2)
+    center_cali2, shape_cali2, theta_cali2 = cam_cali2.image_process()
 
     center_cam = []
-    center_cam.append(center_cam1[0])
-    center_cam.append(center_cam2[0])
+    center_cam.append(center_cali1[0])
+    center_cam.append(center_cali2[0])
     # center_robot = [[-361.8, -187.6], [-436.45, -107]]
 
     # Step2 compute the coordinate of your object in robot coordinate system
-    camera = Camera(_img)
-    img = camera.read_image()
-    center_value, shape, theta = camera.image_process(img)
+    cam_snap = Camera(img_snap)
+    center_snap, shape, theta = cam_snap.image_process()
 
-    center_values = coordinate_transform(center_cam, center_robot, center_value)
+    center_snap_robot = coordinate_transform(center_cam, center_robot, center_snap)
 
-    return center_values, shape, theta
+    return center_snap_robot, shape, theta
+
+def main():
+
+    # Initialize ROS node
+	rospy.init_node('lab6_node')
+
+	ImgProcess('img_cali_1.bmp', 'img_cali_2.bmp', [[-361.8, -187.6], [-436.45, -107]], 'img_snap.bmp')
     
-# if __name__ == '__main__':
-# 	ImgProcess('_test1.bmp', '_test2.bmp', [[-361.8, -187.6], [-436.45, -107]], '_lab5.bmp')
-    
-    
-
-
-
-
-
-
+if __name__ == '__main__':
+	
+	try:
+		main()
+    # When Ctrl+C is executed, it catches the exception
+	except rospy.ROSInterruptException:
+		pass

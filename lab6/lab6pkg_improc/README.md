@@ -22,12 +22,10 @@
 ## How to make your script executable
 
 1. cd catkin_(yourID)
-2. cd catkin_(yourID)/src/lab5pkg_ik/scripts 
-3. chmod +x lab5_exec.py
+2. cd catkin_(yourID)/src/lab6pkg_improc/scripts 
+3. chmod +x lab6_img.py
 
-## Steps of testing your code with robot.
+## Steps of run your code
 
-1. roslaunch ur_robot_driver ur3e_bringup.launch robot_ip:=192.168.1.120
-2. rosrun ur3e_driver_ece470 ur3e_driver_ece470 (another terminal)
-3. rosrun lab5pkg_ik lab5_exec.py xWgrip yWgrip zWgrip yaw_WgripDegree (another terminal)
-4. do not forget to press `start` button in Teach Pendant
+1. roscore 
+2. rosrun lab6pkg_improc lab6_img.py (another terminal, make sure it executable)

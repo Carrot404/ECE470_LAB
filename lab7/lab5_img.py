@@ -195,8 +195,8 @@ def ImgProcess(_test1, _test2, center_robot, _img):
 
     return center_values, shape, theta
     
-# if __name__ == '__main__':
-# 	ImgProcess('_test1.bmp', '_test2.bmp', [[-361.8, -187.6], [-436.45, -107]], '_lab5.bmp')
+if __name__ == '__main__':
+	ImgProcess('_test1.bmp', '_test2.bmp', [[-361.8, -187.6], [-436.45, -107]], '_lab5.bmp')
     
     
 
