@@ -55,8 +55,7 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	print("Forward kinematics calculated:\n")
 
 	# =================== Your code starts here ====================#
-	theta = np.array([theta1-(0.5*PI), theta2, theta3, theta4+(0.5*PI),theta5,theta6])
-	
+	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6])
 	T = np.eye(4)
 
 	M, S = Get_MS()
@@ -135,4 +134,3 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	thetas = np.radians(thetas)
 
 	return thetas
-	
