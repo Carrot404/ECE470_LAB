@@ -1,4 +1,5 @@
-﻿#coding=utf-8
+﻿#!/usr/bin/env python
+
 import cksdk
 import cv2
 import numpy as np

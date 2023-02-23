@@ -1,4 +1,5 @@
-#coding=utf-8
+#!/usr/bin/env python
+
 import platform
 import os
 from ctypes import *
@@ -22,15 +23,15 @@ def __init():
 
     if is_win:
         if is_x86:
-            _sdk = windll.LoadLibrary(basedir + "/CKCameraDLL.dll")
+            _sdk = windll.LoadLibrary(basedir + "/../lib/x64/CKCameraDLL.dll")
         else:
-            _sdk = windll.LoadLibrary(basedir + "/CKCameraDLL_X64.dll")
+            _sdk = windll.LoadLibrary(basedir + "/../lib/x64/CKCameraDLL_X64.dll")
         CALLBACK_FUNC_TYPE = WINFUNCTYPE
     elif is_darwin:
-        _sdk = cdll.LoadLibrary(basedir + "/libCKCameraSDK.dylib")
+        _sdk = cdll.LoadLibrary(basedir + "/../lib/x64/libCKCameraSDK.dylib")
         CALLBACK_FUNC_TYPE = CFUNCTYPE
     else:
-        _sdk = cdll.LoadLibrary(basedir + "/libCKCameraSDK.so")
+        _sdk = cdll.LoadLibrary("/usr/local/lib/libCKCameraSDK.so")
         CALLBACK_FUNC_TYPE = CFUNCTYPE
 
 
