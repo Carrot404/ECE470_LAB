@@ -4,11 +4,13 @@ Before this lab, please Consult \textbf{Appendix} \ref{cprog} of this lab manual
 
 \section{Objectives}
 The purpose of this lab is to familiarize you with the ROS environment and its basic concepts of Node, Topic and Message through a simple turtle simulator.\
+What's more, a useful tool tf is introduced, which lets user keep track of multiple coordinate frames over time.
 In this lab, you will:
 
 \begin{itemize}
 	\item Learn how to show basic node, message and topic information.
 	\item Learn how to publish and subscribe Messages to Topics.
+	\item Learn how to transform points, vectors and other geometric entities between different coordinate frames.
 \end{itemize}
 
 \section{References}
@@ -25,6 +27,11 @@ In this lab, you will:
 \section{Procedure}
 
 \begin{enumerate}
+	\item create your own workspace according to \textbf{Appendix} \ref{cprog} of this lab manual. 
+	This is the workspace you will use for the rest of the lab. DO NOT confuse it with the workspace other groups created. 
+	Then copy the package \textbf{lab2\_{}turtlesim} on your DESKTOP to your workspace. 
+	What is IMPORTANT is to remember to source your workspace when you open a new terminal.
+
 	\item \textbf{Starting} turtlesim: In three separate terminals, execute these three commands\\
 	Hints: ctrl+alt+T(to start a new window), ctrl+shift+W(to close current window), ctrl+shift+E(split window vertically), ctrl+shift+O(split window horizontally)
 
@@ -185,17 +192,87 @@ geometry_msgs/Vector3 angular
 	those two top-level fields. That is, a message with type geometry\_{}msgs/Twist contains exactly six numbers, organized into two vectors called linear and angular. Each of these
 	numbers has the built-in type float64.
 
+	\item Finally, let's try to publish velocity command to the turtle in command line instead of using keyboard.
+	We will use \textbf{rostopic pub} command to publish a message to a topic.
+
+\begin{lstlisting}[language=bash]
+$ rostopic pub /turtle1/cmd_vel geometry_msgs/Twist
+$ "linear:
+$   x: 1.0
+$   y: 0.0
+$   z: 0.0
+$ angular:
+$   x: 0.0
+$   y: 0.0
+$   z: -1.0" -r 1
+\end{lstlisting}
+
+	Here we are publishing a message of type geometry\_{}msgs/Twist to the topic /turtle1/cmd\_{}vel. The message is specified on the command line, and the -r option tells rostopic pub to
+	publish the message repeatedly at a rate of 1 Hz. The message is specified in YAML format, which is a simple text-based format for representing structured data. The message we are
+	sending is a Twist message with linear velocity 1.0 in the x direction and angular velocity -1.0 in the z direction. The turtle should move in a circle.\\
+	Hint: you can utilize the full convenience of the command line by using the \textbf{tab} key to autocomplete the topic name and message type.\\
+
 \end{enumerate}
 
 \section{Task}
+
 In order to master above concepts, here is one simple practice for you. We will have two turtles, as is shown in \figref{turtle_chase}. One is leader and the other is follower.
 The leader turtle is controlled by keyboard input and the follower turtle should be programed to follow the trajectory.
-What you should do is to receive pose data of both turtles and publish command velocity to the follower.
+what you should do is to write a program to make the follower turtle follow the leader turtle.\\
 
 \begin{figure}
 	\centering
 		\includegraphics[scale=1]{image/lab2_turtle_chase.png}
 	\caption{\figlbl{turtle_chase} turtle chase and catch game }
+\end{figure}
+
+Here give a brief introduction of the package \textbf{tf} we will use in this lab.
+The \textbf{tf} package is used to keep track of multiple coordinate frames over time.
+
+\begin{lstlisting}[language=bash]
+$ roslaunch lab2pkg_turtle turtle_tf2_demo.launch
+\end{lstlisting}
+
+You will see the turtlesim start with two turtles. Once the turtlesim is started you can drive the central turtle around in the turtlesim using the keyboard arrow keys, 
+select the second terminal window so that your keystrokes will be captured to drive the turtle.
+
+This demo is using the tf2 library to create three coordinate frames: a \textbf{world} frame, a \textbf{turtle1} frame, and a \textbf{turtle2} frame.
+This demo uses a tf2 broadcaster to publish the turtle coordinate frames.
+
+\textbf{tf\_echo} reports the transform between any two frames broadcasted over ROS.
+
+\begin{lstlisting}[language=bash]
+$ rosrun tf tf_echo /world /turtle1
+\end{lstlisting}
+
+You will see the transform displayed as the \textbf{tf2\_echo} listener receives the frames broadcasted over ROS.
+
+\begin{lstlisting}[language=bash]
+At time 1622031731.625364060
+- Translation: [2.796, 1.039, 0.000]
+- Rotation: in Quaternion [0.000, 0.000, 0.202, 0.979]
+At time 1622031732.614745114
+- Translation: [1.608, 0.250, 0.000]
+- Rotation: in Quaternion [0.000, 0.000, 0.032, 0.999]
+\end{lstlisting}
+
+As you drive your turtle around you will see the transform change as the two turtles move relative to each other.
+
+Also \textbf{rviz} is a visualization tool that is useful for examining tf2 frames. 
+Let's look at our turtle frames using rviz. Let's start rviz with the turtle\_rviz.rviz configuration file using the \textbf{-d} option:
+
+\begin{lstlisting}[language=bash]
+$ rosrun rviz rviz -d ${rospack find lab2pkg_turtle}/config/turtle_rviz.rviz
+\end{lstlisting}
+
+In the side bar you will see the frames broadcasted by tf2. As you drive the turtle around you will see the frames move in rviz.
+
+Now you can start to write your own program to make the follower turtle follow the leader turtle.\\
+
+\begin{figure}
+	\centering
+		\includegraphics[scale=0.25]{image/lab2_turtle_rviz.png}
+	\caption{\figlbl{turtle_rviz} The turtlesim window}
 \end{figure}
 
 \begin{enumerate}
