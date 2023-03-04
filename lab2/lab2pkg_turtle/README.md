@@ -4,6 +4,7 @@
 
 1. comprehend the concept of ROS node, topic, message
 2. learn how to use them in code by a simple `turtlesim` example
+3. see how tf works
 
 ## Task 
 
@@ -20,7 +21,10 @@ catkin_make
 source workspace_path/devel/setup.bash
 # make turtle_chase.py executable
 chmod +x turtle_chase.py
+chmod +x turtle_spawn.py
+chmod +x turtle_tf2_broadcaster.py
 # run 
+roslaunch lab2pkg_turtle turtle_tf2_demo.launch
 roslaunch lab2pkg_turtle turtle_chase.launch
 ```
 
