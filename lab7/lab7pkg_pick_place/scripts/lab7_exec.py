@@ -8,6 +8,10 @@ from lab7_header import *
 from lab7_func import *
 from lab7_img import *
 
+import sys
+sys.path.append("../utils/script/")
+from ckcamera.py import *
+
 
 # UR3 home location
 home = [0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0]
@@ -118,9 +122,14 @@ def main():
 	############## Your Code Start Here ############## 	
 	# TODO: modify by yourself
 
-	img_cali1 = 'img_cali_1.bmp'
-	img_cali2 = 'img_cali_2.bmp'
-	img_snap = 'img_snap.bmp'
+	
+#     camera = CKCamera()
+#     camera.init()
+#     camera.display()
+#     # camera.save_image(path)
+#     camera.uninit()
+
+
 	center_values, shape, theta = ImgProcess(img_cali1, img_cali2, [[-361.8, -187.6], [-436.45, -107]], img_snap)
 
 	############### Your Code End Here ###############
