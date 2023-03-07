@@ -9,7 +9,7 @@
   <node pkg="turtlesim" type="turtlesim_node" name="turtlesim" respawn="true"/>
 
   <!-- this is used for calling spawn service to spawn another turtle -->
-  <node pkg="lab2pkg_turtle" type="turtle_spawn.py" name="turtle_spawn" output="screen"/> 
+  <!-- <node pkg="lab2pkg_turtle" type="turtle_spawn.py" name="turtle_spawn" output="screen"/>  -->
 
   <!-- turtlesim_teleop_key: teleoperate turtle with keyboard input -->
   <!-- same as command: $ rosrun turtlesim turtlesim_teleop_key -->
