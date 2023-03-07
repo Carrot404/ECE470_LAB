@@ -44,7 +44,7 @@ def euclidean_distance(current_pose, goal_pose):
 
 # Steering angle
 def steering_angle(current_pose, goal_pose):
-	return atan2(goal_pose.y - current_pose.y, goal_pose.x - current_pose.x)
+	return math.atan2(goal_pose.y - current_pose.y, goal_pose.x - current_pose.x)
 
 
 ############## Your Code Start Here ##############
@@ -114,14 +114,14 @@ def main():
 			# Porportional controller.
 			
 			# Linear velocity in the x-axis.
-			vel_msg.linear.x = k_linear * distance
+			vel_msg.linear.x = k_linear * euclidean_distance(current_pose, goal_pose)
 			vel_msg.linear.y = 0
 			vel_msg.linear.z = 0
 
 			# Angular velocity in the z-axis.
 			vel_msg.angular.x = 0
 			vel_msg.angular.y = 0
-			vel_msg.angular.z = k_angular * (steering_angle(current_pose, goal_pose))
+			vel_msg.angular.z = k_angular * (steering_angle(current_pose, goal_pose) - current_pose.theta)
 
 			# Publishing vel_msg
 			follower_vel_pub.publish(vel_msg)
