@@ -10,9 +10,9 @@ def save_image():
         print("open camera failed")
         return
     hCamera = result[1]
-    #设置为连续拍照模式
+    # set camera parameters
     cksdk.CameraSetTriggerMode(hCamera, 0)
-    #开启相机
+    # open camera
     cksdk.CameraPlay(hCamera)
     for i in range(10):
         result = cksdk.CameraGetImageBufferEx(hCamera, 1000)
@@ -21,9 +21,9 @@ def save_image():
             continue
         img_info = result[1]
         print("frame image width %d, height %d" % (img_info.iWidth, img_info.iHeight))
-        #保存图片
+        # save image
         cksdk.CameraSaveImage(hCamera, "d:\\test{}".format(i), img_data, img_info, cksdk.FILE_BMP, 100)
-    #暂停相机
+    # pause camera
     cksdk.CameraPause(hCamera)
 
     result = cksdk.CameraUnInit(hCamera)

@@ -10,8 +10,7 @@ from lab7_img import *
 
 import sys
 sys.path.append("../utils/script/")
-from ckcamera.py import *
-
+from ckcamera import *
 
 # UR3 home location
 home = [0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0]

@@ -8,21 +8,21 @@ from ctypes import *
 
 
 def opencv_display():
-    # 初始化相机
+    # init camera
     result = cksdk.CameraInit(0)
     if result[0] != 0:
         print("open camera failed")
         return
     hCamera = result[1]
-    # 设置相机输出格式
+    # set camera parameters
     cksdk.CameraSetIspOutFormat(hCamera, cksdk.CAMERA_MEDIA_TYPE_RGB8)
-    # 设置为连续拍照模式
+    # set trigger mode
     cksdk.CameraSetTriggerMode(hCamera, 0)
 
     win_name = 'CKCamera Display'
     cv2.namedWindow(win_name)
 
-    # 开启相机
+    # open camera
     cksdk.CameraPlay(hCamera)
     while True:
         result = cksdk.CameraGetImageBufferEx(hCamera, 1000)
@@ -42,10 +42,10 @@ def opencv_display():
         elif key == ord('b'):
             cksdk.CameraSetOnceWB(hCamera)
 
-    #暂停相机
+    # pause camera
     cksdk.CameraPause(hCamera)
     cv2.destroyAllWindows()
-    # 去初始化相机
+    # uninit camera
     cksdk.CameraUnInit(hCamera)
 
 def main():

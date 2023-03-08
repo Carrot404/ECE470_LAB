@@ -5,10 +5,10 @@ import os
 from ctypes import *
 from threading import local
 
-# 回调函数类型
+# Callback function type
 CALLBACK_FUNC_TYPE = None
 
-# SDK动态库
+# SDK dynamic library
 _sdk = None
 
 
@@ -31,7 +31,8 @@ def __init():
         _sdk = cdll.LoadLibrary(basedir + "/../lib/x64/libCKCameraSDK.dylib")
         CALLBACK_FUNC_TYPE = CFUNCTYPE
     else:
-        _sdk = cdll.LoadLibrary("/usr/local/lib/libCKCameraSDK.so")
+        # _sdk = cdll.LoadLibrary("/usr/local/lib/libCKCameraSDK.so")
+        _sdk = cdll.LoadLibrary(basedir + "/../lib/x64/libCKCameraSDK.so")
         CALLBACK_FUNC_TYPE = CFUNCTYPE
 
 

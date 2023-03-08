@@ -24,13 +24,13 @@ class CKCamera():
             return False
         
         self.hCamera = result[1]
-        # 设置相机输出格式
+        # set camera parameters
         cksdk.CameraSetIspOutFormat(self.hCamera, cksdk.CAMERA_MEDIA_TYPE_RGB8)
-        # 设置为连续拍照模式
+        # set trigger mode
         cksdk.CameraSetTriggerMode(self.hCamera, 0)
 
     def display(self):
-        # 开启相机
+        # open camera
         cksdk.CameraPlay(self.hCamera)
 
         win_name = 'CKCamera Display'
@@ -38,7 +38,7 @@ class CKCamera():
 
         print("CKCamera guide: ")
         print("1. Press 'Esc' to quit window")
-        print("2. Press 's' to save image, default path: '../img/img_snap.bmp' ")
+        print("2. Press 's' to save image, default path: '../img/img_name.bmp' ")
 
         while True:
             result = cksdk.CameraGetImageBufferEx(self.hCamera, 1000)
@@ -56,18 +56,16 @@ class CKCamera():
             if key == 27:
                 break
             elif key == ord('s'):
-                path = input('input: where to save snapshot <<')
-                cksdk.CameraSaveImage(self.hCamera, path, img_data, img_info, cksdk.FILE_BMP, 100)
+                path = '../img/'
+                name = input('input: image name to save <<')
+                cksdk.CameraSaveImage(self.hCamera, path + name, img_data, img_info, cksdk.FILE_BMP, 100)
         
-        # 暂停相机
+        # pause camera
         cksdk.CameraPause(self.hCamera)
         cv2.destroyAllWindows()
 
-        # 去初始化相机
-        # cksdk.CameraUnInit(hCamera)
-
-    def save_image(self, img_path):
-        # 开启相机
+    def save_image(self, img_name):
+        # open camera
         cksdk.CameraPlay(self.hCamera)
 
         result = cksdk.CameraGetImageBufferEx(self.hCamera, 1000)
@@ -76,14 +74,13 @@ class CKCamera():
             # continue
             img_info = result[1]
             print("frame image width %d, height %d" % (img_info.iWidth, img_info.iHeight))
-            # 保存图片
-            # Test
-            cksdk.CameraSaveImage(self.hCamera, img_path, img_data, img_info, cksdk.FILE_BMP, 100)
-        # 暂停相机
+            # save image
+            cksdk.CameraSaveImage(self.hCamera, '../img/'+img_name, img_data, img_info, cksdk.FILE_BMP, 100)
+        # pause camera
         cksdk.CameraPause(self.hCamera)
 
     def uninit(self):
-        # 去初始化相机
+        # uninit camera
         cksdk.CameraUnInit(self.hCamera)
 
 # def main():

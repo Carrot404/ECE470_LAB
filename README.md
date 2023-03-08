@@ -39,5 +39,5 @@ if some of you guys want to debug in your own laptop, it is recommended to insta
 ## 4. TODO
 
 - [ ] modify `lab6_manual` and `lab7_manual`
-- [ ] integrate camera snapshot into ROS for convenience
-- [ ] and more...
+- [x] integrate camera snapshot into ROS for convenience
+- [ ] install camera dependency on Virtual machine

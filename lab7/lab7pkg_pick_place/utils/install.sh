@@ -1,5 +1,4 @@
 #!/bin/sh
-
 if [ -d /etc/udev/rules.d/ ];then
     sudo cp 90-ckusb.rules /etc/udev/rules.d/
 fi
