@@ -14,16 +14,17 @@
 ## How to run it
 
 ```bash
-# init own workspace as manual-reference A
+# init own workspace as manual-Appendix A.4
 cd catkin_your_workspace/src
 # copy package to directory src
 catkin_make 
 source workspace_path/devel/setup.bash
-# make turtle_chase.py executable
+# make python files executable
+cd lab2pkg_turtle/script
 chmod +x turtle_chase.py
 chmod +x turtle_spawn.py
 chmod +x turtle_tf2_broadcaster.py
-# run 
+# run demo or turtle_chase program
 roslaunch lab2pkg_turtle turtle_tf2_demo.launch
 roslaunch lab2pkg_turtle turtle_chase.launch
 ```
