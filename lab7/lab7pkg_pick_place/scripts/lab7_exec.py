@@ -4,10 +4,12 @@ import copy
 import time
 import rospy
 
+# some headers
 from lab7_header import *
 from lab7_func import *
 from lab7_img import *
 
+# ckcamera api
 import sys
 sys.path.append("../utils/script/")
 from ckcamera import *

@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 
 '''
-We get inspirations of Tower of Hanoi algorithm from the website below.
-This is also on the lab manual.
-Source: https://www.cut-the-knot.org/recurrence/hanoi.shtml
+
+lab3pkg_hanoi/lab3_exec.py
+
+@brief: Hanoi implementation in ROS.
+
+@author: Songjie Xiao
+@date: Monday 2023/1/16
+
 '''
 
 import copy
 import time
 import rospy
 import numpy as np
+# headers for ROS messages and include useful message types
 from lab3_header import *
 
 # 20Hz
@@ -17,7 +23,7 @@ SPIN_RATE = 20
 
 # UR3 home location
 """
-TODO: Define your own Home position
+TODO: Define your own Home position here (in radians)
 """
 home = np.radians([0.00, 0.00, 0.00, 0.00, 0.00, 0.00])
 
@@ -59,7 +65,10 @@ Q = None
 TODO: define a ROS topic callback function for getting the state of suction cup
 Whenever /ur_hardware_interface/io_states publishes info, this callback function is called.
 """
-# def gripper_input_callback(msg):
+def gripper_input_callback(msg):
+
+
+	pass
 
 
 
@@ -166,30 +175,19 @@ def main():
 	rospy.init_node('lab3_node')
  
     # Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
-
-	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint',JointTrajectory,queue_size=10)
+	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint', JointTrajectory, queue_size=10)
 	
-	############## Your Code Start Here ##############
-	# TODO: define a ROS publisher for /ur3e_driver_ece470/setio message 
- 
- 
- 
-	############### Your Code End Here ###############
+	# TODO: define a ROS publisher for /ur3e_driver_ece470/setio message and corresponding callback function
+	# pub_setio = 
 
-
-	# Initialize subscriber to /joint_states and callback fuction
-	# each time data is published
+	# Initialize subscriber to /joint_states, each time /joint_states publishes a new message, the function position_callback is called
 	sub_position = rospy.Subscriber('/joint_states', JointState, position_callback)
  
-	############## Your Code Start Here ##############
 	# TODO: define a ROS subscriber for /ur_hardware_interface/io_states message and corresponding callback function
- 
- 
- 
-	############### Your Code End Here ###############
- 
+	# sub_io = 
  
 	############## Your Code Start Here ##############
+	# This program will requires two user inputs to specify the start location and end location of the block
 	# TODO: modify the code below so that program can get user input
  
 	input_done = 0

@@ -1,4 +1,4 @@
-# README_lab6
+# README
 
 ## How to connect and run your robot
 
