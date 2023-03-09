@@ -2,16 +2,25 @@
 
 ## 1. Task
 
+To solve The Hanoi problem by ROS programming.
 
+### what is different 
+
+1. work for **any** starting and ending location
+2. **Strict** alignment
+3. **Bonus** for taking gripper feedback into consideration
+
+### what to do 
+
+1. complete basic **subscriber** to subscribe io state and **publisher** to publisher to set io.
+2. complete corresponding **callback** function.
+3. **record** all block position (in the form of joint angles) by **FreeMove** UR3 to desired target and store them into Q array. 
+4. complete manipulation code.
 
 ## 2. Code
 
 - `lab3_exec.py`: main code to execute task
 - `lab3_header.py`: some headers and store the  **message types** that will be used in this lab.
-
-
-
-
 
 ## 3. utils
 

@@ -11,41 +11,30 @@ lab3pkg_hanoi/lab3_exec.py
 
 '''
 
-import copy
+import sys
 import time
-import rospy
 import numpy as np
-# headers for ROS messages and include useful message types
+import rospy
+
+# IMPORT! headers for ROS messages and include useful message types
 from lab3_header import *
 
-# 20Hz
-SPIN_RATE = 20 
-
-# UR3 home location
-"""
-TODO: Define your own Home position here (in radians)
-"""
-home = np.radians([0.00, 0.00, 0.00, 0.00, 0.00, 0.00])
-
-# UR3 current position, using home position for initialization
-current_position = copy.deepcopy(home)
-
-thetas = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-digital_in_0 = 0
-analog_in_0 = 0
+# define global variables here
+# store the current position of the arm
+current_position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+# store the current state of the suction cup
+current_io_0 = False
 
 suction_on = True
 suction_off = False
 
-current_io_0 = False
-current_position_set = False
-
 ############## Your Code Start Here ##############
 
 """
-TODO: Definition of position of our tower in Q
+TODO: define position of our tower in Q array and home position of the arm
 """
+
+home = np.radians([0.00, 0.00, 0.00, 0.00, 0.00, 0.00])
 
 Q = None
 
@@ -67,39 +56,25 @@ Whenever /ur_hardware_interface/io_states publishes info, this callback function
 """
 def gripper_input_callback(msg):
 
+	global current_io_0
 
 	pass
 
 
 
  
-############### Your Code End Here ###############
- 
+############## Your Code Start Here ##############
 
 """
+TODO: define a ROS topic callback function for getting the current position of the arm
 Whenever /joint_states publishes info, this callback function is called.
 """
 def position_callback(msg):
 
-	global thetas
 	global current_position
-	global current_position_set
+	
+	pass
 
-	thetas[0] = msg.position[0]
-	thetas[1] = msg.position[1]
-	thetas[2] = msg.position[2]
-	thetas[3] = msg.position[3]
-	thetas[4] = msg.position[4]
-	thetas[5] = msg.position[5]
-
-	current_position[0] = thetas[0]
-	current_position[1] = thetas[1]
-	current_position[2] = thetas[2]
-	current_position[3] = thetas[3]
-	current_position[4] = thetas[4]
-	current_position[5] = thetas[5]
-
-	current_position_set = True
 
 
 ############## Your Code Start Here ##############
@@ -108,12 +83,15 @@ def position_callback(msg):
 TODO: define a function for ROS Publisher to publish your message to the Topic "ur3e_driver_ece470/setio",
 so that we can control the state of suction cup.
 """
-# def gripper(pub_setio, io_0):
+def gripper(pub_setio, io_0):
+
+	pass
  
 
 
 ############### Your Code End Here ###############
- 
+
+# Function for moving the arm to a desired location
 def move_arm(pub_setjoint, dest):
 	msg = JointTrajectory()
 	msg.joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
@@ -126,13 +104,16 @@ def move_arm(pub_setjoint, dest):
 
 ############## Your Code Start Here ##############
 """
-TODO: function to move block from start to end
+TODO: define move_block function which is used to move a block from start to end location
+which includes moving the arm to the start location, gripping the block, moving the arm to the end location, and releasing the block
 """
 ### Hint: Use the Q array to map out your towers by location and height.
 
 def move_block(pub_setjoint, pub_setio, start_loc, start_height, end_loc, end_height):
+
 	global Q
- 
+	
+	pass
  
  
  
@@ -143,38 +124,37 @@ def main():
  
 	global home
 	global Q
-	global SPIN_RATE
 
-    # Definition of our tower
+	# Definition of our tower
 
-    # 2D layers (top view)
+	# 2D layers (top view)
 
-    # Layer (Above blocks)
-    # | Q[0][2][1] Q[1][2][1] Q[2][2][1] |   Above third block
-    # | Q[0][1][1] Q[1][1][1] Q[2][1][1] |   Above point of second block
-    # | Q[0][0][1] Q[1][0][1] Q[2][0][1] |   Above point of bottom block
+	# Layer (Above blocks)
+	# | Q[0][2][1] Q[1][2][1] Q[2][2][1] |   Above third block
+	# | Q[0][1][1] Q[1][1][1] Q[2][1][1] |   Above point of second block
+	# | Q[0][0][1] Q[1][0][1] Q[2][0][1] |   Above point of bottom block
 
-    # Layer (Gripping blocks)
-    # | Q[0][2][0] Q[1][2][0] Q[2][2][0] |   Contact point of third block
-    # | Q[0][1][0] Q[1][1][0] Q[2][1][0] |   Contact point of second block
-    # | Q[0][0][0] Q[1][0][0] Q[2][0][0] |   Contact point of bottom block
+	# Layer (Gripping blocks)
+	# | Q[0][2][0] Q[1][2][0] Q[2][2][0] |   Contact point of third block
+	# | Q[0][1][0] Q[1][1][0] Q[2][1][0] |   Contact point of second block
+	# | Q[0][0][0] Q[1][0][0] Q[2][0][0] |   Contact point of bottom block
 
-    # First index - From left to right position A, B, C
-    # Second index - From "bottom" to "top" position 1, 2, 3
-    # Third index - From gripper contact point to "in the air" point
+	# First index - From left to right position A, B, C
+	# Second index - From "bottom" to "top" position 1, 2, 3
+	# Third index - From gripper contact point to "in the air" point
 
-    # How the arm will move (Suggestions)
-    # 1. Go to the "above (start) block" position from its base position
-    # 2. Drop to the "contact (start) block" position
-    # 3. Rise back to the "above (start) block" position
-    # 4. Move to the destination "above (end) block" position
-    # 5. Drop to the corresponding "contact (end) block" position
-    # 6. Rise back to the "above (end) block" position
+	# How the arm will move (Suggestions)
+	# 1. Go to the "above (start) block" position from its base position
+	# 2. Drop to the "contact (start) block" position
+	# 3. Rise back to the "above (start) block" position
+	# 4. Move to the destination "above (end) block" position
+	# 5. Drop to the corresponding "contact (end) block" position
+	# 6. Rise back to the "above (end) block" position
 
 	# Initialize ROS node
 	rospy.init_node('lab3_node')
  
-    # Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
+	# Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
 	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint', JointTrajectory, queue_size=10)
 	
 	# TODO: define a ROS publisher for /ur3e_driver_ece470/setio message and corresponding callback function
@@ -188,30 +168,26 @@ def main():
  
 	############## Your Code Start Here ##############
 	# This program will requires two user inputs to specify the start location and end location of the block
-	# TODO: modify the code below so that program can get user input
- 
+	# TODO: modify the code below so that program can get two user inputs
+	# example code for getting user input is provided below
 	input_done = 0
-	loop_count = 0
 	start = 0
 	mid = 1
 	des = 2
 
 	while(not input_done):
-		input_string = raw_input("Enter number of loops <Either 1 2 3 or 0 to quit> ")
+		input_string = input("Enter number of loops <Either 1 2 3 or 0 to quit> ")
 		print("You entered " + input_string + "\n")
 
 		if(int(input_string) == 1):
 			input_done = 1
-			loop_count = 1
 		elif (int(input_string) == 2):
 			input_done = 1
-			loop_count = 2
 		elif (int(input_string) == 3):
 			input_done = 1
-			loop_count = 3
 		elif (int(input_string) == 0):
 			print("Quitting... ")
-			# sys.exit()
+			sys.exit()
 		else:
 			print("Please just enter the character 1 2 3 or 0 to quit \n\n")
 
@@ -222,35 +198,31 @@ def main():
 
 	############### Your Code End Here ###############
  
-	# Check if ROS is ready for operation
-	while(rospy.is_shutdown()):
-		print("ROS is shutdown!")
- 
 	rospy.loginfo("Sending Goals ...")
  
-	loop_rate = rospy.Rate(SPIN_RATE)
- 
 	############## Your Code Start Here ##############
-	# TODO: modify the code so that UR3 can move tower accordingly from user input
+	# Main manipulation code defined here
+	# move_arm function is used to move the arm to a desired position
+	# move_block function is used to move a block from start to end location
+	# which includes moving the arm to the start location, gripping the block, moving the arm to the end location, and releasing the block
+	# TODO: here to define a series of move_block or move_arm function calls to solve the Hanoi Tower problem
  
- 
-	move_block(pub_setjoint, pub_setio, start, 0, des,   2)
+	# move_block(pub_setjoint, pub_setio, start, 0, des,   2)
 
 
-
+	pass
 
 
 	
- 
+	# move_arm(pub_setjoint, home)
  
 	############### Your Code End Here ###############
  
  
  
 if __name__ == '__main__':
-	
 	try:
 		main()
-    # When Ctrl+C is executed, it catches the exception
+	# When Ctrl+C is executed, it catches the exception
 	except rospy.ROSInterruptException:
 		pass
