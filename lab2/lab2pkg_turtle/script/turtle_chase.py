@@ -18,6 +18,9 @@ import math
 from turtlesim.srv import Spawn
 
 # TODO: import necessary ROS message types and libraries
+# from turtlesim.msg import ()
+# from geometry_msgs.msg import ()
+
 
 
 
@@ -36,7 +39,7 @@ Whenever topic receive new info, callback function is called.
 def leader_pose_callback(msg):
 
 	global goal_pose
-	
+
 	pass
 
 
@@ -84,14 +87,19 @@ def main():
 		
 		while(euclidean_distance(current_pose, goal_pose) >= float(distance_tolerance)):
 
-			# Porportional controller.
-			
+			# only linear velocity in the x-axis and angular velocity in the z-axis are considered.
+			# TODO: compute the desired linear velocity and angular velocity and publish to the topic.
+			# choose proper proportional gain for linear velocity and angular velocity
+			# recommended value: linear velocity proportional gain = 1, angular velocity proportional gain = 4.0
+
+		
+
+
 			pass
 
 
 
 
-		
 		############### Your Code End Here ###############
 		
 		# Stopping turtle after the goal_location is achieved.
