@@ -29,7 +29,7 @@ In this lab, you will:
 \begin{enumerate}
 	\item create your own workspace according to \textbf{Appendix} \ref{cprog} of this lab manual. 
 	This is the workspace you will use for the rest of the lab. DO NOT confuse it with the workspace other groups created. 
-	Then copy the package \textbf{lab2\_{}turtlesim} on your DESKTOP to your workspace. 
+	Then copy the package \textbf{lab2pkg\_{}turtle} on your DESKTOP to your workspace \textbf{catkin\_(yourID)/src} . 
 	What is IMPORTANT is to remember to source your workspace when you open a new terminal.
 
 	\item \textbf{Starting} turtlesim: In three separate terminals, execute these three commands\\
@@ -263,6 +263,8 @@ Let's look at our turtle frames using rviz. Let's start rviz with the turtle\_rv
 
 \begin{lstlisting}[language=bash]
 $ rosrun rviz rviz -d ${rospack find lab2pkg_turtle}/config/turtle_rviz.rviz
+$ or
+$ rosrun rviz rviz -d {your absolute path to turtle_rviz.rviz}
 \end{lstlisting}
 
 In the side bar you will see the frames broadcasted by tf2. As you drive the turtle around you will see the frames move in rviz.
