@@ -121,7 +121,13 @@ def main():
 			# Angular velocity in the z-axis.
 			vel_msg.angular.x = 0
 			vel_msg.angular.y = 0
-			vel_msg.angular.z = k_angular * (steering_angle(current_pose, goal_pose) - current_pose.theta)
+			angle = steering_angle(current_pose, goal_pose) - current_pose.theta
+			if angle > math.pi:
+				vel_msg.angular.z = k_angular * (angle - 2*math.pi)
+			elif angle < -math.pi:
+				vel_msg.angular.z = k_angular * (angle + 2*math.pi)
+			else:
+				vel_msg.angular.z = k_angular * angle
 
 			# Publishing vel_msg
 			follower_vel_pub.publish(vel_msg)
