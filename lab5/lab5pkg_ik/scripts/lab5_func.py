@@ -70,7 +70,6 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	l07 = 0.085
 	l08 = 0.092
 	l09 = 0
-	l10 = 0.0   # thickness of aluminum plate is around 0.01
 
 	# xgrip = ?
 	# ygrip = ?

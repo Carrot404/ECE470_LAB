@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-# from ur_msgs.msg import IOStates, Digital
-# from sensor_msgs.msg import JointState
-# from trajectory_msgs.msg import JointTrajectory,JointTrajectoryPoint
+
+from ur_msgs.msg import IOStates, Digital
+from sensor_msgs.msg import JointState
+from trajectory_msgs.msg import JointTrajectory,JointTrajectoryPoint
 
 # messages for student to use
 """

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import copy
 import time
 import rospy
@@ -7,14 +8,8 @@ import numpy as np
 from lab5_header import *
 from lab5_func import *
 
-# 20Hz
-SPIN_RATE = 20 
-
-# UR3 home location
-home = [0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0]
-
-# UR3 current position, using home position for initialization
-current_position = copy.deepcopy(home)
+# store the current position of the arm
+current_position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 thetas = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
@@ -138,9 +133,6 @@ def main():
 		print("ROS is shutdown!")
 
 	rospy.loginfo("Sending Goals ...")
-
-	# Initialize the rate to publish to ur3e_driver_ece470/setjoint
-	loop_rate = rospy.Rate(SPIN_RATE)
 
 	while(  abs(thetas[0]-new_dest[0]) > 0.005 or \
 			abs(thetas[1]-new_dest[1]) > 0.005 or \
