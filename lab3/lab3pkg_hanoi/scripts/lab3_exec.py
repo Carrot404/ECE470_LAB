@@ -12,119 +12,16 @@ lab3pkg_hanoi/lab3_exec.py
 '''
 
 import sys
-import time
-import numpy as np
 import rospy
+import numpy as np
 
-# IMPORT! headers for ROS messages and include useful message types
-from lab3_header import *
-
-# define global variables here
-# store the current position of the arm
-current_position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-# store the current state of the suction cup
-current_io_0 = False
-
-suction_on = True
-suction_off = False
-
-############## Your Code Start Here ##############
-
-"""
-TODO: define position of our tower in Q array and home position of the arm
-"""
-
-home = np.radians([0.00, 0.00, 0.00, 0.00, 0.00, 0.00])
-
-Q = None
-
-
-
-
-
-############### Your Code End Here ###############
- 
- 
-
- 
- 
-############## Your Code Start Here ##############
-
-"""
-TODO: define a ROS topic callback function for getting the state of suction cup
-Whenever /ur_hardware_interface/io_states publishes info, this callback function is called.
-"""
-def gripper_input_callback(msg):
-
-	global current_io_0
-
-	pass
-
-
-
- 
-############## Your Code Start Here ##############
-
-"""
-TODO: define a ROS topic callback function for getting the current position of the arm
-Whenever /joint_states publishes info, this callback function is called.
-"""
-def position_callback(msg):
-
-	global current_position
-	
-	pass
-
-
-
-############## Your Code Start Here ##############
-
-"""
-TODO: define a function for ROS Publisher to publish your message to the Topic "ur3e_driver_ece470/setio",
-so that we can control the state of suction cup.
-"""
-def gripper(pub_setio, io_0):
-
-	pass
- 
-
-
-############### Your Code End Here ###############
-
-# Function for moving the arm to a desired location
-def move_arm(pub_setjoint, dest):
-	msg = JointTrajectory()
-	msg.joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
-	point = JointTrajectoryPoint()
-	point.positions = dest
-	point.time_from_start = rospy.Duration(2)
-	msg.points.append(point)
-	pub_setjoint.publish(msg)
-	time.sleep(2.5)
-
-############## Your Code Start Here ##############
-"""
-TODO: define move_block function which is used to move a block from start to end location
-which includes moving the arm to the start location, gripping the block, moving the arm to the end location, and releasing the block
-"""
-### Hint: Use the Q array to map out your towers by location and height.
-
-def move_block(pub_setjoint, pub_setio, start_loc, start_height, end_loc, end_height):
-
-	global Q
-	
-	pass
- 
- 
- 
-############### Your Code End Here ###############
- 
+from lab3_ur3e import UR3e
  
 def main():
- 
-	global home
-	global Q
 
+	# Initialize ROS node
+	rospy.init_node('lab3_node')
+ 
 	# Definition of our tower
 
 	# 2D layers (top view)
@@ -151,20 +48,24 @@ def main():
 	# 5. Drop to the corresponding "contact (end) block" position
 	# 6. Rise back to the "above (end) block" position
 
-	# Initialize ROS node
-	rospy.init_node('lab3_node')
- 
-	# Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
-	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint', JointTrajectory, queue_size=10)
-	
-	# TODO: define a ROS publisher for /ur3e_driver_ece470/setio message and corresponding callback function
-	# pub_setio = 
+	############## Your Code Start Here ##############
 
-	# Initialize subscriber to /joint_states, each time /joint_states publishes a new message, the function position_callback is called
-	sub_position = rospy.Subscriber('/joint_states', JointState, position_callback)
+	"""
+	TODO: define position of our tower in Q array and home position of the arm
+	"""
+
+	home = np.radians([0.00, 0.00, 0.00, 0.00, 0.00, 0.00])
+
+	Q = None
+
+
+
+
+	############### Your Code End Here ###############
+
+	ur3e = UR3e(home, Q)
+
  
-	# TODO: define a ROS subscriber for /ur_hardware_interface/io_states message and corresponding callback function
-	# sub_io = 
  
 	############## Your Code Start Here ##############
 	# This program will requires two user inputs to specify the start location and end location of the block
@@ -207,14 +108,12 @@ def main():
 	# which includes moving the arm to the start location, gripping the block, moving the arm to the end location, and releasing the block
 	# TODO: here to define a series of move_block or move_arm function calls to solve the Hanoi Tower problem
  
-	# move_block(pub_setjoint, pub_setio, start, 0, des,   2)
+	# ur3e.move_block(start, 0, des,   2)
 
 
 	pass
-
-
 	
-	# move_arm(pub_setjoint, home)
+	ur3e.move_arm(home)
  
 	############### Your Code End Here ###############
  
