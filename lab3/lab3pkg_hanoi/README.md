@@ -13,8 +13,13 @@ To solve The Hanoi problem by ROS programming.
 ### what to do 
 
 1. complete basic **subscriber** to subscribe io state and **publisher** to publisher to set io.
+
 2. complete corresponding **callback** function.
-3. **record** all block position (in the form of joint angles) by **FreeMove** UR3 to desired target and store them into Q array. 
+
+3. **record** all block position (in the form of joint angles) by **FreeMove** UR3 to desired target and store them into Q array, the recommend Q array structure:
+
+    <img src="../../image/lab3_QStructure.png" style="zoom:25%;" />
+
 4. complete manipulation code.
 
 ## 2. Code
