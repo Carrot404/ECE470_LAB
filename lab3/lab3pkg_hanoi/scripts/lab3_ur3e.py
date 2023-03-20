@@ -36,12 +36,14 @@ class UR3e():
         
         # TODO: define a ROS publisher for /ur3e_driver_ece470/setio message and corresponding callback function
         # self.pub_setio = 
+        self.pub_setio = rospy.Publisher('ur3e_driver_ece470/setio', Digital, queue_size=10)
 
         # Initialize subscriber to /joint_states, each time /joint_states publishes a new message, the function position_callback is called
         self.sub_position = rospy.Subscriber('/joint_states', JointState, self.position_callback)
     
         # TODO: define a ROS subscriber for /ur_hardware_interface/io_states message and corresponding callback function
         # self.sub_io = 
+        self.sub_io = rospy.Subscriber('/ur_hardware_interface/io_states', IOStates, self.gripper_input_callback)
 
 
     """
@@ -50,7 +52,13 @@ class UR3e():
     """
     def gripper_input_callback(self, msg):
 
-        pass
+        # pass
+        pin = 0
+        pin_state = msg.digital_in_states[pin].state
+        if (pin_state):
+            self.current_io_0 = True
+        else:
+            self.current_io_0 = False
 
     """
     TODO: define a ROS topic callback function for getting the current position of the arm
@@ -58,7 +66,13 @@ class UR3e():
     """
     def position_callback(self, msg):
 
-        pass
+        # pass
+        self.current_position[0] = msg.position[0]
+        self.current_position[1] = msg.position[1]
+        self.current_position[2] = msg.position[2]
+        self.current_position[3] = msg.position[3]
+        self.current_position[4] = msg.position[4]
+        self.current_position[5] = msg.position[5]
 
     """
     TODO: define a function for ROS Publisher to publish your message to the Topic "ur3e_driver_ece470/setio",
@@ -66,7 +80,13 @@ class UR3e():
     """
     def gripper(self, io_0):
 
-        pass
+        # pass
+        msg = Digital()
+        msg.pin = 0
+        msg.state = io_0
+        self.pub_setio.publish(msg)
+        time.sleep(1)
+        
 
     # Function for moving the arm to a desired location
     def move_arm(self, dest):
