@@ -25,7 +25,7 @@ To solve The Hanoi problem by ROS programming.
 ## 2. Code
 
 - `lab3_exec.py`: main code to execute task
-- `lab3_header.py`: some headers and store the  **message types** that will be used in this lab.
+- `lab3_header.py`: some headers and store the **message types** that will be used in this lab.
 
 ## 3. utils
 
@@ -40,7 +40,7 @@ $ rosrun lab3pkg_hanoi lab3_exec.py
 # DO NOT FORGET to press `start` button in Teach Pendant
 ```
 
-### 3.3 How to connect your robot
+### 3.2 How to connect your robot
 
 ```bash
 $ roslaunch ur_robot_driver ur3e_bringup.launch robot_ip:=192.168.1.120
@@ -52,21 +52,21 @@ $ [INFO] [1571124040.693924407]: Sent program to robot
 $ [INFO] [1571124040.772090597]: Robot ready to receive control commands.
 ```
 
-### 3.4 How to compile your workspace
+### 3.3 How to compile your workspace
 
 ```bash
 $ cd catkin_(yourID)
 $ catkin_make
 ```
 
-### 3.5 How to source your workspace (before open a new terminal )
+### 3.4 How to source your workspace (after open a new terminal )
 
 ```bash
 $ cd catkin_(yourID)
 $ source devel/setup.bash
 ```
 
-### 3.6 How to make your script executable
+### 3.5 How to make your script executable
 
 ```bash
 $ cd catkin_(yourID)/src/lab3pkg_hanoi/scripts 
