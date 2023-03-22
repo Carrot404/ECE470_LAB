@@ -4,7 +4,7 @@
 
 lab3pkg_hanoi/lab3_ur3e.py
 
-@brief: UR3e class for ROS Implement
+@brief: UR3e class include functions for controlling the UR3e arm and the gripper
 
 @author: Songjie Xiao
 @date: Monday 2023/03/17
@@ -16,36 +16,32 @@ import rospy
 # IMPORT! headers for ROS messages and include useful message types
 from lab3_header import *
 
-
-
 class UR3e():
 
-    def __init__(self, home, Q):
-
-        self.home = home
-        self.Q = Q
+    def __init__(self):
 
         # define variables here
         # store the current position of the arm
-        self.current_position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         # store the current state of the suction cup
         self.current_io_0 = False
 
         # Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
         self.pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint', JointTrajectory, queue_size=10)
 
-        # TODO: define a ROS publisher for /ur3e_driver_ece470/setio message and corresponding callback function
+        # TODO: define a ROS publisher for /ur3e_driver_ece470/setio message with buffer size of 10
         # self.pub_setio =
-        self.pub_setio = rospy.Publisher('ur3e_driver_ece470/setio', Digital, queue_size=10)
 
         # Initialize subscriber to /joint_states, each time /joint_states publishes a new message, the function position_callback is called
         self.sub_position = rospy.Subscriber('/joint_states', JointState, self.position_callback)
 
         # TODO: define a ROS subscriber for /ur_hardware_interface/io_states message and corresponding callback function
         # self.sub_io =
-        self.sub_io = rospy.Subscriber('/ur_hardware_interface/io_states', IOStates, self.gripper_input_callback)
+    
+    def init_array(self, home, Q):
 
-
+        # initialize the home position and Q array
+        self.home = home
+        self.Q = Q
 
     def gripper_input_callback(self, msg):
         """
@@ -53,13 +49,8 @@ class UR3e():
         Whenever /ur_hardware_interface/io_states publishes info, this callback function is called.
         """
         ############## Your Code Start Here ##############
-        # pass
-        pin = 0
-        pin_state = msg.digital_in_states[pin].state
-        if pin_state:
-            self.current_io_0 = True
-        else:
-            self.current_io_0 = False
+
+        pass
 
         ############## Your Code End Here ##############
 
@@ -70,13 +61,8 @@ class UR3e():
         Whenever /joint_states publishes info, this callback function is called.
         """
         ############## Your Code Start Here ##############
-        # pass
-        self.current_position[0] = msg.position[0]
-        self.current_position[1] = msg.position[1]
-        self.current_position[2] = msg.position[2]
-        self.current_position[3] = msg.position[3]
-        self.current_position[4] = msg.position[4]
-        self.current_position[5] = msg.position[5]
+
+        pass
 
         ############### Your Code End Here ###############
 
@@ -87,13 +73,9 @@ class UR3e():
         so that we can control the state of suction cup.
         """
         ############## Your Code Start Here ##############
-        # pass
-        msg = Digital()
-        msg.pin = 0
-        msg.state = io_0
-        self.pub_setio.publish(msg)
-        time.sleep(1)
 
+        pass
+    
         ############### Your Code End Here ###############
 
 
@@ -121,6 +103,7 @@ class UR3e():
         Hint: Use the Q array to map out your towers by location and height.
         """
         ############## Your Code Start Here ##############
+
         pass
 
         ############### Your Code End Here ###############

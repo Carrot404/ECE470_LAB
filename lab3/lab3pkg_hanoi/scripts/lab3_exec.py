@@ -5,20 +5,20 @@
 lab3pkg_hanoi/lab3_exec.py
 
 @brief: Hanoi implementation in ROS.
-
 @author: Songjie Xiao
-@date: Monday 2023/1/16
+@date: Monday 2023/3/20
 
 '''
 
 import sys
+import time
 import rospy
 import numpy as np
 
 from lab3_ur3e import UR3e
 
-
 def main():
+
 	# Initialize ROS node
 	rospy.init_node('lab3_node')
 
@@ -40,7 +40,6 @@ def main():
 	# 4. Drop to the corresponding "contact (end) block" position
 	# 5. Rise back to the "home" position
 
-
 	"""
 	TODO: define position of our tower in Q array and home position of the arm
 	"""
@@ -51,8 +50,6 @@ def main():
 	Q = None
 
 	############### Your Code End Here ###############
-
-	ur3e = UR3e(home, Q)
 
 	# This program will require two user inputs to specify the start location and end location of the block
 	# TODO: modify the code below so that program can get two user inputs
@@ -91,13 +88,18 @@ def main():
 	# TODO: here to define a series of move_block or move_arm function calls to solve the Hanoi Tower problem
 	############## Your Code Start Here ##############
 
-	# ur3e.move_block(start, 0, des,   2)
-	# ...
+	# initialize ur3e class
+	ur3e = UR3e()
+	ur3e.init_array(home, Q)
+	time.sleep(2)
 
-	ur3e.move_arm(home)
+	# example code for moving the arm to home position is provided below
+	# ur3e.move_arm(home)
+	# ur3e.move_block(start, 0, des, 2)
+	# ...
+	# ur3e.move_arm(home)
 
 	############### Your Code End Here ###############
-
 
 if __name__ == '__main__':
 	try:
