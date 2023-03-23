@@ -48,4 +48,4 @@ $ roslaunch lab2pkg_turtle turtle_chase.launch
 
 ## example
 
-![](../../image/lab2_example.gif)
+![](./img/lab2_example.gif)
