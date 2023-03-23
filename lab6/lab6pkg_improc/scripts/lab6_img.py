@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+'''
+
+lab6pkg_improc/lab6_img.py
+
+@brief: image processing for lab6, including template matching, image filtering, edge detection, contour detection, etc.
+@author: Songjie Xiao
+@date: Monday 2023/3/20
+
+'''
+
 #########################################################################
 #
 #  Lab 6-Image Processing
@@ -236,6 +246,5 @@ if __name__ == '__main__':
 	
 	try:
 		main()
-    # When Ctrl+C is executed, it catches the exception
-	except rospy.ROSInterruptException:
-		pass
+	except:
+		print("Error occurs!")
