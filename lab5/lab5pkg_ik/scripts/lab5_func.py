@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+'''
+
+lab5pkg_ik/lab5_func.py
+
+@brief: functions for computing forward and inverse kinematics of UR3e robot arm
+@author: Songjie Xiao
+@date: Monday 2023/3/20
+
+'''
+
 import numpy as np
 import math
 from scipy.linalg import expm

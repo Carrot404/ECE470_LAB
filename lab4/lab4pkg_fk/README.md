@@ -18,6 +18,12 @@ Calculate the forward kinematics of UR3e using PoE method.
 
 2. according to PoE method, decide and compute all things.
 
+## 2. Code
+
+- `lab4_exec.py`: main code to execute forward kinematics
+- `lab4_func.py`: function to compute forward kinematics using PoE method (*TODO*)
+- `test_fk.cpp`: verify code (*NO MODIFICTION*)
+
 ## 3. utils
 
 ### 3.1 how to run code
