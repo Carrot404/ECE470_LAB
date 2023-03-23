@@ -55,7 +55,6 @@ def main():
 
 	# initialize UR3e functions
 	ur3e = UR3e()
-	procedure = ur3e.procedure
 	print("Please Press 'Start' button on the Teach Pendant to continue ...")
 
 	# wait for the 'Start' button on the Teach Pendant
