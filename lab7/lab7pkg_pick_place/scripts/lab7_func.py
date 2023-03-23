@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+'''
+
+lab7pkg_pick_place/lab_func.py
+
+@brief: functions for computing forward and inverse kinematics of UR3e robot arm
+@author: Songjie Xiao
+@date: Monday 2023/3/20
+
+'''
+
 import numpy as np
 import math
 from scipy.linalg import expm
@@ -17,16 +27,10 @@ def Get_MS():
 	M = np.eye(4)
 	S = np.zeros((6,6))
 
+
+
+
 	
-
-
-
-
-
-
-
-
-
 	# ==============================================================#
 	return M, S
 
@@ -52,12 +56,12 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 
 
 
-
-
 	# ==============================================================#
 	
 	print(str(T) + "\n")
+
 	return T
+
 
 """
 Function that calculates an elbow up Inverse Kinematic solution for the UR3
@@ -76,7 +80,6 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	l07 = 0.085
 	l08 = 0.092
 	l09 = 0
-	l10 = 0.0   # thickness of aluminum plate is around 0.01
 
 	# xgrip = ?
 	# ygrip = ?

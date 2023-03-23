@@ -1,186 +1,79 @@
 #!/usr/bin/env python
 
-import copy
-import time
-import rospy
+'''
 
-# some headers
-from lab7_header import *
-from lab7_func import *
-from lab7_img import *
+lab7pkg_pick_place/lab7_exec.py
+
+@brief: main file to execute the pick and place task
+
+@author: Songjie Xiao
+@date: Monday 2023/03/23
+
+'''
 
 # ckcamera api
 import sys
 sys.path.append("../utils/script/")
 from ckcamera import *
 
-# UR3 home location
-home = [0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0, 0*PI/180.0]
+from lab7_func import *
+from lab7_ur3e import *
+from lab7_img import *
 
-# UR3 current position, using home position for initialization
-current_position = copy.deepcopy(home)
-
-thetas = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-digital_in_0 = 0.0
-analog_in_0 = 0.0
-
-suction_on = True
-suction_off = False
-
-current_io_0 = False
-current_position_set = False
-
-"""
-Whenever /ur_hardware_interface/io_states publishes info this callback function is called.
-"""
-def input_callback(msg):
-
-	global digital_in_0
-	pin = 0
-	pin_state = msg.digital_in_states[pin].state
-	
-	if(pin_state):
-		digital_in_0 = 1
-	else:
-		digital_in_0 = 0
-
-"""
-Whenever ur3/position publishes info, this callback function is called.
-"""
-def position_callback(msg):
-
-	global thetas
-	global current_position
-	global current_position_set
-
-	thetas[0] = msg.position[0]
-	thetas[1] = msg.position[1]
-	thetas[2] = msg.position[2]
-	thetas[3] = msg.position[3]
-	thetas[4] = msg.position[4]
-	thetas[5] = msg.position[5]
-
-	current_position[0] = thetas[0]
-	current_position[1] = thetas[1]
-	current_position[2] = thetas[2]
-	current_position[3] = thetas[3]
-	current_position[4] = thetas[4]
-	current_position[5] = thetas[5]
-
-	current_position_set = True
-
-"""
-Function to control the suction cup on/off
-"""
-def gripper(pub_setio, io_0):
-
-	global current_io_0
-
-	error = 0
-
-	current_io_0 = io_0
-
-	msg = Digital()
-	msg.pin = 0
-	msg.state = io_0
-	pub_setio.publish(msg)
-	time.sleep(1)
-
-	return error
-
-"""
-Move robot arm from one position to another
-"""
-def move_arm(pub_setjoint, dest):
-
-	msg = JointTrajectory()
-	msg.joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint","wrist_1_joint", "wrist_2_joint", "wrist_3_joint"]
-	point = JointTrajectoryPoint()
-	point.positions = dest
-	point.time_from_start = rospy.Duration(2)
-	msg.points.append(point)
-	pub_setjoint.publish(msg)
-	time.sleep(2.5)
-
-"""
-Program run from here
-"""
 def main():
 
 	# Initialize ROS node
 	rospy.init_node('lab7_node')
 
-	# Initialize publisher for ur3e_driver_ece470/setjoint with buffer size of 10
-	pub_setio = rospy.Publisher('ur3e_driver_ece470/setio',Digital,queue_size=10)
-	pub_setjoint = rospy.Publisher('ur3e_driver_ece470/setjoint',JointTrajectory,queue_size=10)
+	# Initialize CKCamera
+	camera = CKCamera()
+	camera.init()
 
-	# Initialize subscriber to /joint_states & /ur_hardware_interface/io_states and callback function
-	# each time data is published
-	sub_position = rospy.Subscriber('/joint_states', JointState, position_callback)
-	sub_gripper_input = rospy.Subscriber('/ur_hardware_interface/io_states', IOStates, input_callback)
+	# 1. save first calibration image, enter 's' to save image with an input of image_name
+	camera.display()
+	# 2. Free move the robot to obtain the robot coordinate (x,y) of first block
+	# TODO: get input of robot coordinate (x,y) of first block
+	# center_robot1 = int(input("Please input the robot coordinate (x,y) of this block: "))
+	# 3. save second calibration image, enter 's' to save image with an input of image_name
+	camera.display()
+	# 4. Free move the robot to obtain the robot coordinate (x,y) of second block
+	# TODO: get input of robot coordinate (x,y) of second block
+	# center_robot1 = int(input("Please input the robot coordinate (x,y) of this block: "))
 
+	# 5. save snapshot image, randomly place at least 5 blocks
+	camera.display()
+
+	# uninit CKCamera
+	camera.uninit()
+
+	# TODO: complete the coordinate transformation function in lab7_img.py
+	# 6. do Image Processing and coordinate transformation to obtain the robot coordinate (x,y) of each block
+	center_values, shape, theta = lab_imgproc(center_robot1, center_robot2)
+	
 	############## Your Code Start Here ############## 	
-	# TODO: modify by yourself
+	# TODO: main execution of pick and place task
 
-	
-#     camera = CKCamera()
-#     camera.init()
-#     camera.display()
-#     # camera.save_image(path)
-#     camera.uninit()
+	# initialize UR3e functions
+	ur3e = UR3e()
+	procedure = ur3e.procedure
+	print("Please Press 'Start' button on the Teach Pendant to continue ...")
 
+	# wait for the 'Start' button on the Teach Pendant
+	time.sleep(2)
 
-	center_values, shape, theta = ImgProcess(img_cali1, img_cali2, [[-361.8, -187.6], [-436.45, -107]], img_snap)
+	# call inverse kinematics to compute joint values according to robot coordinate
+	# z values is assigned by users
+	# dest_pos = lab_invk(x, y, z, theta)
+
+	# do the move_arm and gripper operation to pick and place the block
+	# ur3e.move(dest_pos)
+	# ur3e.gripper(True)
+
+	pass
 
 	############### Your Code End Here ###############
 
-
-	# Check if ROS is ready for operation
-	while(rospy.is_shutdown()):
-		print("ROS is shutdown!")
-
-	rospy.loginfo("Sending Goals ...")
-
-	############## Your Code Start Here ############## 
-	# TODO: finish the task
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	############### Your Code End Here ###############
-
-	rospy.loginfo("Destination is reached!")
-
+	rospy.loginfo("Finish Pick and place task!")
 
 if __name__ == '__main__':
 	
