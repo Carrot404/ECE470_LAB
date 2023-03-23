@@ -25,6 +25,7 @@ To solve The Hanoi problem by ROS programming.
 ## 2. Code
 
 - `lab3_exec.py`: main code to execute task
+- `lab3_ur3e.py`: define ur3e's publisher and subscriber
 - `lab3_header.py`: some headers and store the **message types** that will be used in this lab.
 
 ## 3. utils

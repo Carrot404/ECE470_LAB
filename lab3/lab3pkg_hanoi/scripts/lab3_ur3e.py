@@ -22,6 +22,7 @@ class UR3e():
 
         # define variables here
         # store the current position of the arm
+        self.current_position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         # store the current state of the suction cup
         self.current_io_0 = False
 
