@@ -1,3 +1,14 @@
+/**
+ * @file test_fk.cpp
+ * @author Songjie Xiao (songjiexiao@zju.edu.cn)
+ * @brief verify code for forward kinematics of UR3e
+ * @version 0.1
+ * @date 2023-03-23
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #include <ros/ros.h>
 #include <tf/tf.h>
 #include <tf/transform_listener.h>

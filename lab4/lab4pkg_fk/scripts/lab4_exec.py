@@ -1,14 +1,19 @@
 #!/usr/bin/env python
 
-import rospy
+'''
+
+lab4pkg_fk/lab4_exec.py
+
+@brief: compute forward kinematics of UR3e robot arm
+@author: Songjie Xiao
+@date: Monday 2023/3/20
+
+'''
+
 import sys
 from lab4_func import *
 
-
 def main():
-
-	# Initialize ROS node
-	rospy.init_node('lab4_node')
 
 	if(len(sys.argv) != 7):
 		print("\n")
@@ -28,6 +33,5 @@ if __name__ == '__main__':
 	
 	try:
 		main()
-    # When Ctrl+C is executed, it catches the exception
-	except rospy.ROSInterruptException:
-		pass
+	except:
+		print("Error occurs!")

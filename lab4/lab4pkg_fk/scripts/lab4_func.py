@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+'''
+
+lab4pkg_fk/lab4_func.py
+
+@brief: functions for computing forward kinematics using Product of Exponential (PoE) method
+@author: Songjie Xiao
+@date: Monday 2023/3/20
+
+'''
+
 import numpy as np
 import math
 from scipy.linalg import expm
