@@ -45,21 +45,21 @@ $ rosrun lab4pkg_fk test_fk
 ### 3.3 How to verify answer online
 
 ```bash
-$ python lab4_exec.py 1.57 0.00 0.00 -1.57 0.00 0.00
+$ python lab4_exec.py 90.00 0.00 0.00 -90.00 0.00 0.00
 # Forward kinematics calculated with gripper: 
 # 3.55283e-06 0.00565484 0.999984 0.29008
 # 0.000628308 0.999984 -0.00565484 -0.543749
 # -1 0.000628318 -2.05104e-10 0.151796
 # 0 0 0 1
 
-$ python lab4_exec.py 1.04 -0.79 -0.48 0.06 -0.23 -0.55
+$ python lab4_exec.py 59.59 -45.26 -27.50 3.44 -13.18 -31.51
 # Forward kinematics calculated with gripper: 
 # -0.263007 0.395416 0.880042 0.0955197
 # -0.0699828 0.901933 -0.426167 -0.407005
 # -0.962252 -0.173673 -0.209543 0.463785
 # 0 0 0 1
 
-$ python lab4_exec.py 1.63 -1.25 -0.17 -1.54 -0.54 0.84
+$ python lab4_exec.py 93.39 -71.62 -9.74 -88.24 -30.94 48.13
 # Forward kinematics calculated with gripper: 
 # -0.318115 0.343549 0.883616 0.28087
 # -0.446133 0.76814 -0.459267 -0.191219

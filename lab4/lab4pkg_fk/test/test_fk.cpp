@@ -16,8 +16,8 @@
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "test_fk");
-	ros::NodeHandle nh;
+    ros::init(argc, argv, "test_fk");
+    ros::NodeHandle nh;
 
     tf::TransformBroadcaster tf_br;
     tf::Transform transform;
