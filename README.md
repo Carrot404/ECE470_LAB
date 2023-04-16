@@ -40,4 +40,5 @@ if some of you guys want to debug in your own laptop, it is recommended to insta
 
 - [ ] modify `lab6_manual` and `lab7_manual`
 - [x] integrate camera snapshot into ROS for convenience
-- [ ] install camera dependency on Virtual machine
+- [x] install camera dependency on Virtual machine
+- [ ] lab4 manual error, **return value**
