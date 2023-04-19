@@ -106,5 +106,4 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 
 	print("theta1 to theta6: " + str(thetas) + "\n")
 
-	thetas = np.radians(thetas)
 	return thetas
