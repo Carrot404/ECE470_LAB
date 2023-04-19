@@ -2,13 +2,15 @@
 
 ## 1. Task
 
-Calculate the inverse kinematics of UR3e arm
+Calculate the inverse kinematics of UR3e arm according to geometry.
 
-- to be continued
+Specifically:
 
-### what to do 
+1. $\theta_6$  is given by your input, $\theta_5$ is constant.
 
-1. to be continued
+1. calculate $\theta_2$ first according to the top view.
+2. then calculate $\theta_2$ and $\theta_3$ according to the side view.
+3. derive $\theta_4 = \theta_3 + \theta_2 - \pi/2$ ; (vary with each group)
 
 ## 2. Code
 
