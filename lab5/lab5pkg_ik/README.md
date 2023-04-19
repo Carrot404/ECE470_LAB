@@ -7,10 +7,10 @@ Calculate the inverse kinematics of UR3e arm according to geometry.
 Specifically:
 
 1. $\theta_6$  is given by your input, $\theta_5$ is constant.
-
-1. calculate $\theta_2$ first according to the top view.
-2. then calculate $\theta_2$ and $\theta_3$ according to the side view.
-3. derive $\theta_4 = \theta_3 + \theta_2 - \pi/2$ ; (vary with each group)
+2. calculate $\theta_1$ first according to the top view.
+3. then calculate $\theta_2$ and $\theta_3$ according to the side view.
+4. derive $\theta_4 = \theta_3 + \theta_2 - \pi/2$ ; (it may vary with each group)
+5. offset of joint1 and joint4 should be considered. (refer to lab4)
 
 ## 2. Code
 
