@@ -42,3 +42,5 @@ if some of you guys want to debug in your own laptop, it is recommended to insta
 - [x] integrate camera snapshot into ROS for convenience
 - [x] install camera dependency on Virtual machine
 - [ ] lab4 manual error, **return value**
+- [ ] lab7: rosrun relative path error
+- [ ] lab7: ur3e no fresh data when use ckcamera
