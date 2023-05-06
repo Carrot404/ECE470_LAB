@@ -44,3 +44,4 @@ if some of you guys want to debug in your own laptop, it is recommended to insta
 - [ ] lab4 manual error, **return value**
 - [ ] lab7: rosrun relative path error
 - [ ] lab7: ur3e no fresh data when use ckcamera
+- [ ] lab7: response very slow when calling opencv_display()
