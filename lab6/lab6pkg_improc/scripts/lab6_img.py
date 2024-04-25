@@ -162,10 +162,13 @@ def main():
     # two calibration images to calculate the image coordinate
     # with corresponding image coordinate and robot coordinate, 
     # a linear transformation between image coordinate and robot coordinate can be computed
-    path_img_cali1 = '../img/img_cali_1.bmp'
-    path_img_cali2 = '../img/img_cali_2.bmp'
+    # path_img_cali1 = '../img/img_cali_1.bmp'
+    path_img_cali1 = '../img/new_cali_1.png'
+    # path_img_cali2 = '../img/img_cali_2.bmp'
+    path_img_cali2 = '../img/new_cali_2.png'
     # snapshot image saved by your camera
-    path_img_snap = '../img/img_snap.bmp'
+    # path_img_snap = '../img/img_snap.bmp'
+    path_img_snap = '../img/new_snap.png'
 
     # init ImageProcess class
     img_process = ImageProcess()

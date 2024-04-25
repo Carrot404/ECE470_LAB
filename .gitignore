@@ -2,3 +2,5 @@
 tex
 doc
 code
+.vscode/
+.DS_Store
