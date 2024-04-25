@@ -5,21 +5,24 @@ This repo provides code and manual for ECE470: Introduction to Robotics.
 ## 1. Lab schedule
 
 1. Lab1: Pick and Place experiment through Teach Pendent to solve Hanoi problem
-2. Lab2: Get started with ROS (Node, Topic, Message) by Turtlesim
+2. Lab2: Get started with ROS (Node, Topic, Message) by Turtlesim (**Optional**)
 3. Lab3: The Tower of Hanoi with ROS
 4. Lab4: Forward Kinematics of UR3e
 5. Lab5: Inverse Kinematics of UR3e
 6. Lab6: Image Processing (filtering, edge detection, segmentation and classification)
 7. Lab7: Camera Calibration
 
-## 2. Important
+> [!IMPORTANT]
+>
+> Due to **limited** time of lab session, it is strongly **recommended** to get prepared for lab session.
+>
+> 1. read lab manual before session and know what to do.
+> 2. It is **encouraged** to complete your code before lab.
+> 3. Any questions are welcomed.
 
-Due to **limited** time of lab session, it is strongly **recommended** to get prepared for lab session.
+## 2. Preparation
 
-1. read lab manual before session and know what to do 
-2. It is **encouraged** to complete your code before lab. 
 
-> Any questions are welcomed.
 
 ## 3. Ubuntu and ROS (Optional)
 
@@ -38,10 +41,10 @@ if some of you guys want to debug in your own laptop, it is recommended to insta
 
 ## 4. TODO
 
-- [ ] modify `lab6_manual` and `lab7_manual`
+- [x] modify `lab6_manual` and `lab7_manual`
 - [x] integrate camera snapshot into ROS for convenience
 - [x] install camera dependency on Virtual machine
-- [ ] lab4 manual error, **return value**
-- [ ] lab7: rosrun relative path error
-- [ ] lab7: ur3e no fresh data when use ckcamera
-- [ ] lab7: response very slow when calling opencv_display()
+- [x] lab4 manual error, **return value**
+- [x] lab7: rosrun relative path error
+- [x] lab7: ur3e no fresh data when use ckcamera
+- [x] lab7: response very slow when calling opencv_display()

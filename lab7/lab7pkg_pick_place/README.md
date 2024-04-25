@@ -13,7 +13,7 @@ Our **main task** in the following two labs is to pick and place all the blocks 
 ### 1.1 what to do:
 
 1. **Camera Calibration:** transform block's image coordinate into robot's coordinate
-   - take two snapshots using `ckcamera` api and record corresponding robot's coordinate. Tip: (move robot to approach the block and obtain the approximate value in Teach Pedant )
+   - take two snapshots using `realsense_camera.py` api and record corresponding robot's coordinate. Tip: (move robot to approach the block and obtain the approximate value in Teach Pedant )
    - do the above image classification to identify image coordinate.
    - complete `coordinate_transform` function in `lab7_img.py` 
    - now you can obtain robot's coordinate Given a new set of blocks.
@@ -25,10 +25,19 @@ Our **main task** in the following two labs is to pick and place all the blocks 
 - `lab7_func.py`: Forward Kinematics solver and Inverse Kinematics solver function. Pasted from previous lab4 and lab5.
 - `lab7_ur3e.py`: UR3e class including `move_arm` and `gripper` 
 - `lab7_img.py`: image processing function to identify the **shape**, **centroid** and **orientation**. **Coordinate Transformation** need to be done here. 
+- `realsense_camera.py`: camera class to take snapshot and display image.
 
 ## 3. utils
 
+> [!IMPORTANT]
+>
+> Snapshot by `python realsense_camera.py` now !
+
 ### 3.1 How to snapshot using ckcamera
+
+> [!WARNING]
+>
+> `ckcamera` is **deprecated**, please use `realsense_camera.py` instead.
 
 ````python 
 # define camera object
