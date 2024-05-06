@@ -11,10 +11,13 @@ lab7pkg_pick_place/lab7_exec.py
 
 '''
 
+'''
 # ckcamera api
 import sys
 sys.path.append("../utils/script/")
 from ckcamera import *
+'''
+
 
 from lab7_func import *
 from lab7_ur3e import *
@@ -25,6 +28,7 @@ def main():
 	# Initialize ROS node
 	rospy.init_node('lab7_node')
 
+	'''
 	# Initialize CKCamera
 	camera = CKCamera()
 	camera.init()
@@ -45,6 +49,7 @@ def main():
 
 	# uninit CKCamera
 	camera.uninit()
+	'''
 
 	# TODO: complete the coordinate transformation function in lab7_img.py
 	# 6. do Image Processing and coordinate transformation to obtain the robot coordinate (x,y) of each block
